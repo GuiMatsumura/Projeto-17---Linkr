@@ -9,10 +9,17 @@ export default function Signin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [loading, setLoading] = useState(false);
+
     function makeButton() {
 
-        return 'Sign in';
-
+        return (
+            loading ? (
+                <ThreeDots color="#FFFFFF" height={13} align='center' />
+            ) : (
+                'Sign up'
+            )
+        )
     }
 
     return (
@@ -29,7 +36,7 @@ export default function Signin() {
                 <form>
                     <input
                         type="email"
-                        disabled={false}
+                        disabled={loading ? true : false}
                         placeholder="e-mail"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -37,7 +44,7 @@ export default function Signin() {
 
                     <input
                         type="password"
-                        disabled={false}
+                        disabled={loading ? true : false}
                         placeholder="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -45,7 +52,7 @@ export default function Signin() {
 
                     <button type="submit">{makeButton()}</button>
                 </form>
-                
+
                 <Link to={"/signup"}>
                     <h3>First time? Create an account!</h3>
                 </Link>
