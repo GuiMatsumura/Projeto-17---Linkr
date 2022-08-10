@@ -31,7 +31,7 @@ h2{
 
 @media (max-width: 600px){
   width: auto;
-  height: 30vh;
+  height: 35vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -131,12 +131,12 @@ h3{
 
 @media (max-width: 600px){
   width: auto;
-  /* height: 60%; */
-  height: 70vh;
+  height: 65vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
 
   form{
     display: flex;
@@ -189,6 +189,7 @@ height: 100%;
 @media (max-width: 600px){
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   overflow: hidden;
 }
 `

@@ -1,6 +1,6 @@
 import { LeftBox, RightBox, MainBox } from "./style"
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -53,32 +53,32 @@ export default function Signup() {
             disabled={loading ? true : false}
             placeholder="e-mail"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} 
-            required/>
+            onChange={(e) => setEmail(e.target.value)}
+            required />
 
           <input
             type="password"
             disabled={loading ? true : false}
             placeholder="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} 
-            required/>
+            onChange={(e) => setPassword(e.target.value)}
+            required />
 
           <input
             type="text"
             disabled={loading ? true : false}
             placeholder="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)} 
-            required/>
+            onChange={(e) => setUsername(e.target.value)}
+            required />
 
           <input
             type="text"
             disabled={loading ? true : false}
             placeholder="picture url"
             value={photo}
-            onChange={(e) => setPhoto(e.target.value)} 
-            required/>
+            onChange={(e) => setPhoto(e.target.value)}
+            required />
 
 
           <button type="submit">
@@ -89,7 +89,9 @@ export default function Signup() {
             )}
           </button>
         </form>
-        <h3>Switch back to log in</h3>
+        <Link to={"/"}>
+          <h3>Switch back to log in</h3>
+        </Link>
       </RightBox>
     </MainBox>
   );
