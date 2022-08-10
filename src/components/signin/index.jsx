@@ -1,8 +1,9 @@
 import { LeftBox, RightBox, MainBox } from "./style"
-import { Link } from "react-router-dom";
-import { useState } from "react";
-//import axios from "axios";
-//import { ThreeDots } from 'react-loader-spinner';
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { ThreeDots } from 'react-loader-spinner';
+import UserContext from "../../contexts/UserContext";
+import axios from "axios";
 
 export default function Signin() {
 
@@ -10,6 +11,9 @@ export default function Signin() {
     const [password, setPassword] = useState("");
 
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const { setToken } = useContext(UserContext);
 
     function makeButton() {
 
@@ -17,10 +21,40 @@ export default function Signin() {
             loading ? (
                 <ThreeDots color="#FFFFFF" height={13} align='center' />
             ) : (
-                'Sign up'
+                'Sign in'
             )
         )
     }
+
+    function submitData(event) {
+
+        event.preventDefault();
+
+        setLoading(true);
+
+        const LINK_API = "http://localhost:4000/signin";
+
+        const request = axios.post(LINK_API, {
+            email,
+            password,
+        });
+
+        request.then(response => {
+
+            setToken(response.data.token);
+            navigate("/posts");
+            alert('Logado com sucesso!');
+
+        });
+
+        request.catch(_err => {
+
+            setLoading(false);
+            alert("E-mail ou senha inválidos! Tente novamente.");
+
+        });
+    }
+
 
     return (
 
@@ -33,7 +67,7 @@ export default function Signin() {
             </LeftBox>
 
             <RightBox>
-                <form>
+                <form onSubmit={submitData}>
                     <input
                         type="email"
                         disabled={loading ? true : false}
