@@ -13,7 +13,7 @@ export default function Signin() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const { setToken } = useContext(UserContext);
+    const { token, setToken } = useContext(UserContext);
 
     function makeButton() {
 
@@ -43,7 +43,8 @@ export default function Signin() {
 
             setToken(response.data.token);
             navigate("/timeline");
-
+            localStorage.getItem(token);
+            
         });
 
         request.catch(_err => {
