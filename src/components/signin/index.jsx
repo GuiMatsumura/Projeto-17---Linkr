@@ -42,8 +42,7 @@ export default function Signin() {
         request.then(response => {
 
             setToken(response.data.token);
-            navigate("/posts");
-            alert('Logado com sucesso!');
+            navigate("/timeline");
 
         });
 
