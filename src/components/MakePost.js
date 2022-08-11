@@ -12,12 +12,7 @@ export default function MakePost() {
       <div>
         <h2>What are you going to share today?</h2>
         <form
-          onSubmit={() =>
-            handleSubmit(
-              (setButtonCtt = { setButtonCtt }),
-              (setDisable = { setDisable })
-            )
-          }
+          onSubmit={(event) => handleSubmit(event, setButtonCtt, setDisable)}
         >
           <input
             type="text"
@@ -42,10 +37,10 @@ export default function MakePost() {
   );
 }
 
-function handleSubmit(event, { setButtonCtt, setDisable }) {
+function handleSubmit(event, setButtonCtt, setDisable) {
   event.preventDefault();
-  setButtonCtt("Publishing...");
   setDisable(true);
+  setButtonCtt("Publishing...");
 
   //   let body =
 }
@@ -89,6 +84,10 @@ const Container = styled.div`
         border: none;
         border-radius: 5px;
         height: 31px;
+
+        &:disabled{
+            background-color: #8caeda;
+        }
       }
       input,
       textarea {
@@ -100,6 +99,9 @@ const Container = styled.div`
         &::placeholder {
           color: #949494;
           font-family: "Lato", sans-serif;
+        }
+        &:disabled{
+            background-color: #dbdada;
         }
       }
       textarea {
