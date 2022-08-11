@@ -13,7 +13,7 @@ export default function MakePost() {
 
   return (
     <Container>
-      <img src="" />
+      <img src="" alt="Profile" />
       <div>
         <h2>What are you going to share today?</h2>
         <form
@@ -22,8 +22,6 @@ export default function MakePost() {
               event,
               setButtonCtt,
               setDisable,
-              setUrl,
-              setDescription,
               url,
               description,
               token
@@ -57,8 +55,6 @@ async function handleSubmit(
   event,
   setButtonCtt,
   setDisable,
-  setUrl,
-  setDescription,
   url,
   description,
   token
@@ -72,22 +68,21 @@ async function handleSubmit(
   setDisable(true);
   setButtonCtt("Publishing...");
   const body = {
-    url: url,
+    url,
     description,
   };
   try {
     await axios.post("http://localhost:4000/post", body, config);
     setDisable(false);
     setButtonCtt("Publish");
-    setUrl("");
-    setDescription("");
   } catch (error) {
-    console.log(error)
+    console.log(error);
     alert("Houve um erro ao publicar seu link");
     setDisable(false);
     setButtonCtt("Publish");
   }
 }
+
 const Container = styled.div`
   *:focus {
     outline: none;
@@ -112,6 +107,7 @@ const Container = styled.div`
       font-size: 20px;
       font-weight: 300;
       margin-bottom: 18px;
+      margin-top: 10px;
     }
     form {
       width: 100%;
@@ -154,6 +150,20 @@ const Container = styled.div`
       }
       input {
         height: 30px;
+      }
+    }
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+    img {
+      display: none;
+    }
+    div {
+      h2 {
+        text-align: center;
+      }
+      form {
+        padding-left: 22px;
       }
     }
   }
