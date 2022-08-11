@@ -4,6 +4,7 @@ import { useState } from 'react';
 import UserContext from "./contexts/UserContext";
 import Signin from "./components/signin";
 import Signup from "./components/signup";
+import Menu from "./components/menu";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/timeline" element={<Menu />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
