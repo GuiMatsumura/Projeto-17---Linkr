@@ -1,26 +1,42 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import UserContext from "../contexts/UserContext";
 export default function MakePost() {
   const [disable, setDisable] = useState(false);
   const [buttonCtt, setButtonCtt] = useState("Publish");
 
-  const [link, setLink] = useState("");
+  const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
+
+  const { token } = useContext(UserContext);
+
   return (
     <Container>
       <img src="" />
       <div>
         <h2>What are you going to share today?</h2>
         <form
-          onSubmit={(event) => handleSubmit(event, setButtonCtt, setDisable)}
+          onSubmit={(event) =>
+            handleSubmit(
+              event,
+              setButtonCtt,
+              setDisable,
+              setUrl,
+              setDescription,
+              url,
+              description,
+              token
+            )
+          }
         >
           <input
             type="text"
             placeholder="http://..."
             required
             disabled={disable}
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
           />
           <textarea
             placeholder="Awesome article about #javascript"
@@ -37,12 +53,40 @@ export default function MakePost() {
   );
 }
 
-function handleSubmit(event, setButtonCtt, setDisable) {
+async function handleSubmit(
+  event,
+  setButtonCtt,
+  setDisable,
+  setUrl,
+  setDescription,
+  url,
+  description,
+  token
+) {
+  let config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
   event.preventDefault();
   setDisable(true);
   setButtonCtt("Publishing...");
-
-  //   let body =
+  const body = {
+    url: url,
+    description,
+  };
+  try {
+    await axios.post("http://localhost:4000/post", body, config);
+    setDisable(false);
+    setButtonCtt("Publish");
+    setUrl("");
+    setDescription("");
+  } catch (error) {
+    console.log(error)
+    alert("Houve um erro ao publicar seu link");
+    setDisable(false);
+    setButtonCtt("Publish");
+  }
 }
 const Container = styled.div`
   *:focus {
@@ -85,8 +129,8 @@ const Container = styled.div`
         border-radius: 5px;
         height: 31px;
 
-        &:disabled{
-            background-color: #8caeda;
+        &:disabled {
+          background-color: #8caeda;
         }
       }
       input,
@@ -100,8 +144,8 @@ const Container = styled.div`
           color: #949494;
           font-family: "Lato", sans-serif;
         }
-        &:disabled{
-            background-color: #dbdada;
+        &:disabled {
+          background-color: #dbdada;
         }
       }
       textarea {
