@@ -1,7 +1,20 @@
-import { BottomBox, MainBox, MenuBox, ProfileMenu, PopUpMenu } from "./style";
-import { FaChevronDown } from "react-icons/fa";
+import { BottomBox, MainBox, MenuBox, ProfileMenu } from "./style";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { PopUpMenu } from "./popupmenu";
+import { useState } from "react";
 
 export default function Menu() {
+
+    const [clicked, setClicked] = useState(false)
+
+    function makeIcon() {
+
+        return (
+            clicked ?
+                <FaChevronUp onClick={() => { setClicked(false) }} /> :
+                <FaChevronDown onClick={() => { setClicked(true) }} />
+        )
+    }
 
     return (
 
@@ -10,15 +23,13 @@ export default function Menu() {
                 <span>linkr</span>
                 <ProfileMenu>
                     <div className="icon">
-                        <FaChevronDown></FaChevronDown>
+                        {makeIcon()}
                     </div>
-                    <img src="" alt="perfil" />
+                    <img src="" alt="perfil" onClick={() => { setClicked(!clicked) }} />
                 </ProfileMenu>
-                <PopUpMenu>
-                    <span>Logout</span>
-                </PopUpMenu>
+                <PopUpMenu clicked={clicked} />
             </MenuBox>
-            <BottomBox></BottomBox>
+            <BottomBox onClick={() => { setClicked(false) }}></BottomBox>
         </MainBox>
     );
 } 

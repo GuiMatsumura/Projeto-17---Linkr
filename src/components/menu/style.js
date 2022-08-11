@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const MainBox = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -17,7 +18,7 @@ export const BottomBox = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100vh;
-    background-color: red;
+    background-color: #333333;
 `
 
 export const MenuBox = styled.menu`
@@ -29,7 +30,9 @@ export const MenuBox = styled.menu`
     justify-content: space-between;
 
     background: #151515;
-    position: relative;
+    position: fixed;
+
+    top: 0;
 
     span {
         margin-left: 3%;
@@ -47,6 +50,7 @@ export const MenuBox = styled.menu`
 `
 
 export const ProfileMenu = styled.div`
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -66,35 +70,5 @@ export const ProfileMenu = styled.div`
         align-items: center;
         background: white;
         border-radius: 26.5px;
-    }
-`
-
-export const PopUpMenu = styled.div`
-    position: absolute;
-    width: 150px;
-    height: 47px;
-    right: 0;
-    top: 72px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #171717;
-    border-radius: 0px 0px 0px 20px;
-
-    span {
-        width: 57px;
-        height: 20px;
-        left: 1344px;
-        top: 81px;
-
-        font-family: 'Lato';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 17px;
-        line-height: 20px;
-        letter-spacing: 0.05em;
-
-        color: #FFFFFF;
     }
 `
