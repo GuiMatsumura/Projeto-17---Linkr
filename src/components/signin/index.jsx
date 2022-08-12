@@ -13,7 +13,7 @@ export default function Signin() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const { token, setToken } = useContext(UserContext);
+    const { setToken, setImage } = useContext(UserContext);
 
     function makeButton() {
 
@@ -42,9 +42,11 @@ export default function Signin() {
         request.then(response => {
 
             setToken(response.data.token);
+            setImage(response.data.photo);
             navigate("/timeline");
-            localStorage.getItem(token);
-            
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("image", response.data.photo);
+
         });
 
         request.catch(_err => {
