@@ -1,26 +1,5 @@
 import styled from 'styled-components';
 
-export const MainBox = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    @media (max-width: 600px){
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        overflow: hidden;
-    }`
-
-export const BottomBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100vh;
-    background-color: #333333;
-`
-
 export const MenuBox = styled.menu`
     width: 100%;
     height: 72px;
@@ -30,9 +9,6 @@ export const MenuBox = styled.menu`
     justify-content: space-between;
 
     background: #151515;
-    position: fixed;
-
-    top: 0;
 
     span {
         margin-left: 3%;

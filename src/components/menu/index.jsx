@@ -1,4 +1,4 @@
-import { BottomBox, MainBox, MenuBox, ProfileMenu } from "./style";
+import { MenuBox, ProfileMenu } from "./style";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { PopUpMenu } from "./popupmenu";
 import { useContext, useState } from "react";
@@ -21,8 +21,6 @@ export default function Menu() {
     }
 
     return (
-
-        <MainBox>
             <MenuBox>
                 <span>linkr</span>
                 <ProfileMenu>
@@ -33,7 +31,5 @@ export default function Menu() {
                 </ProfileMenu>
                 <PopUpMenu clicked={clicked} />
             </MenuBox>
-            <BottomBox onClick={() => { setClicked(false) }}></BottomBox>
-        </MainBox>
     );
 } 
