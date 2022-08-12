@@ -9,11 +9,11 @@ export default function MakePost() {
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
 
-  const { token } = useContext(UserContext);
-
+  const image = localStorage.getItem("image");
+  const token = localStorage.getItem("token");
   return (
     <Container>
-      <img src="" alt="Profile" />
+      <img src={image} alt="Profile" />
       <div>
         <h2>What are you going to share today?</h2>
         <form
@@ -22,6 +22,8 @@ export default function MakePost() {
               event,
               setButtonCtt,
               setDisable,
+              setUrl,
+              setDescription,
               url,
               description,
               token
@@ -55,6 +57,8 @@ async function handleSubmit(
   event,
   setButtonCtt,
   setDisable,
+  setUrl,
+  setDescription,
   url,
   description,
   token
@@ -73,11 +77,13 @@ async function handleSubmit(
   };
   try {
     await axios.post("http://localhost:4000/post", body, config);
+    setUrl("");
+    setDescription("");
     setDisable(false);
     setButtonCtt("Publish");
   } catch (error) {
     console.log(error);
-    alert("Houve um erro ao publicar seu link");
+    alert("Houve um erro ao publicar seu link: " + error.response.data);
     setDisable(false);
     setButtonCtt("Publish");
   }
@@ -97,6 +103,7 @@ const Container = styled.div`
   img {
     border-radius: 50%;
     width: 50px;
+    height: 50px;
     margin: 16px 18px 0;
   }
   div {
