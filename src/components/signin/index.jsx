@@ -1,19 +1,18 @@
-import { LeftBox, RightBox, MainBox } from "./style"
+import { LeftBox, RightBox, MainBox } from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { ThreeDots } from 'react-loader-spinner';
+import { ThreeDots } from "react-loader-spinner";
 import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 
 export default function Signin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-
-    const { setToken, setImage } = useContext(UserContext);
+  const { setToken, setImage } = useContext(UserContext);
 
     function makeButton() {
 
