@@ -5,9 +5,10 @@ import ReactTooltip from 'react-tooltip';
 import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 
-export default function Like() {
+export default function Like({ statusLike, postId }) {
 
-    const [clickedLike, setClickedLike] = useState(false);
+    const [clickedLike, setClickedLike] = useState(statusLike);
+    const [likesPost, setLikesPost] = useState([]);
 
     const { token } = useContext(UserContext);
     const defaultToken = token ? token : localStorage.getItem("token");
@@ -18,22 +19,75 @@ export default function Like() {
     function makeLike() {
         return (
             clickedLike ?
-                <AiFillHeart 
-                    data-tip 
-                    data-for="like" 
-                    fill={COLOR_LIKE} 
-                    onClick={() => submitLike()} /> :
-                <AiOutlineHeart 
-                    data-tip 
-                    data-for="like" 
-                    fill={COLOR_NOLIKE} 
-                    onClick={() => submitLike()} />
+                <div data-tip data-for="like" >
+                    <AiFillHeart
+                        fill={COLOR_LIKE}
+                        onClick={() => submitLike()}
+                        onMouseOver={() => getLikes()} />
+                    <ReactTooltip
+                        id="like"
+                        effect="solid"
+                        place="bottom"
+                        textColor="#505050"
+                        backgroundColor="white">
+                        {
+                            likesPost.map((v, i) => {
+                                if (i <= 1) {
+                                    return `${i === 0 ? "Você, " : v.username}`;
+                                }
+                            })
+                        }
+                        {
+                            likesPost.length > 2 ? 
+                                " e outras " + `${likesPost.length - 2}` + " pessoas" : ""
+                        }
+                    </ReactTooltip>
+                </div>
+                :
+                <div data-tip data-for="like">
+                    <AiOutlineHeart
+                        fill={COLOR_NOLIKE}
+                        onClick={() => submitLike()}
+                        onMouseOver={() => getLikes()} />
+                    <ReactTooltip
+                        id="like"
+                        effect="solid"
+                        place="bottom"
+                        textColor="#505050"
+                        backgroundColor="white">
+                        {
+                            likesPost.map((v, i) => {
+                                if (i <= 1) {
+                                    return v.username + `${i === 0 ? ", " : ""}`;
+                                }
+                            })
+                        }
+                        {
+                            likesPost.length > 2 ? 
+                                "e outras " + likesPost.length + " pessoas" : ""
+                        }
+                    </ReactTooltip>
+                </div>
         )
+    }
+
+    function getLikes() {
+
+        const body = { like: clickedLike, postId }
+        const URL = "http://localhost:4000/like-post"
+        const config = { headers: { Authorization: 'Bearer ' + defaultToken } }
+
+        const request = axios.post(URL, body, config);
+
+        request.then((response) => { setLikesPost(response.data) })
+
+        request.catch(() => alert("Post Id inexistente!!!"))
+
     }
 
     function submitLike() {
 
-        const body = { like: clickedLike, postId: "1" }
+        const body = { like: clickedLike, postId }
         const URL = "http://localhost:4000/likes"
         const config = { headers: { Authorization: 'Bearer ' + defaultToken } }
 
@@ -44,11 +98,6 @@ export default function Like() {
         request.catch(() => alert("Post Id inexistente!!!"))
     }
 
-    return (
-        <>
-            {makeLike()}
-            <ReactTooltip id="like" effect="solid" place="bottom">likes</ReactTooltip>
-        </>
-    );
+    return makeLike();
 
 } 

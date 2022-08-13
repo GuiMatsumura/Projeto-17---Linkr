@@ -6,7 +6,8 @@ export default function Timeline() {
     <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
       <Menu />
       <MakePost />
-      <Like></Like>
+      <Like statusLike={true} postId={1}></Like>
+      <Like statusLike={false} postId={1}></Like>
     </div>
   );
 }
