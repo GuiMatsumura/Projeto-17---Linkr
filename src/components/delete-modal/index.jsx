@@ -14,7 +14,7 @@ export default function DeleteModal() {
 
   function deletePost(id) {
     const LINK_API = "BOTAR O LINK";
-    const request = axios.delete(LINK_API, config);
+    const request = axios.delete(LINK_API); //botar o config
     setLoading(true);
 
     request.then(response => {
@@ -38,7 +38,7 @@ export default function DeleteModal() {
           </Text>
           <Buttons>
             <button className="noButton">No, go back</button>
-            <button className="yesButton" onClick={() => deletePost(id)}>
+            <button className="yesButton" /* onClick={() => deletePost(id)} */>
               {loading ? (
                 <ThreeDots color="#FFFFFF" height={13} align='center' />
               ) : (

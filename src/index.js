@@ -11,7 +11,6 @@ function App() {
         <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/teste" element={<UserProfile />} />
-        {/* <Route path="/teste" element={<DeleteModal />} /> */}
         </Routes>
       </BrowserRouter>
   )

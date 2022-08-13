@@ -28,6 +28,7 @@ background-color: #333333;
 height: 100vh;
 width: 100vw;
 position: relative;
+overflow-x: hidden;
 `
 
 export const LeftBox = styled.div`
@@ -95,14 +96,20 @@ h2{
 
 export const Post = styled.div`
 display: flex;
-position: absolute;
-top: 230px;
-left: 241px;
 padding: 19px 21px 20px 18px;
 width: 611px;
 height: 276px;
 background-color: #171717;
 border-radius: 16px;
+margin-bottom: 16px;
+`
+
+export const Posts = styled.div`
+display: flex;
+flex-direction: column;
+position: absolute;
+top: 230px;
+left: 241px;
 `
 
 export const Trending = styled.div`
@@ -137,13 +144,16 @@ li{
   line-height: 23px;
   letter-spacing: 0.05em;
   color: #FFFFFF;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 ul{
-  width: 130px;
-  height: 300px;
-  padding: 22px 0 30px 16px;
-  background-color: red;
+  width: auto;
+  height: auto;
+  padding: 30px 0 30px 16px;
 }
+`
+
+export const Hashtag = styled.span`
+color: #00ffff;
 `
