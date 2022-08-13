@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { IoHeartOutline } from "react-icons/io5";
+import { useParams } from "react-router-dom";
 import { Header, Body, LeftBox, RightBox, Post, Trending, Posts } from "./style"
 
 export default function UserProfile() {
+  const {id} = useParams()
   const [userData, setUserData] = useState(false);
   useEffect(() => {
     /* const config = {
@@ -12,7 +14,7 @@ export default function UserProfile() {
       }
     }; */
 
-    const LINK_API = "http://localhost:4000/user/1";
+    const LINK_API = `http://localhost:4000/user/${id}`;
     const request = axios.get(LINK_API); //botar o header
     request.then(response => {
       const { data } = response;
