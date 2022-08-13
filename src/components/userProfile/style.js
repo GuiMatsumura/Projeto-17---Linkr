@@ -59,7 +59,7 @@ h1{
 .likeButton{
   color: white;
   font-size: 1.5em;
-  font-weight: bold;
+  font-weight: bolder;
 }
 `
 
