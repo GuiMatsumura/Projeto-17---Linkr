@@ -28,7 +28,7 @@ export default function Search({ display }) {
         onChange={(e) => setSearchField(e.target.value)}
       />
       <FaSearch />
-      <SearchList filteredPersons={filteredPersons} />
+      {/* <SearchList filteredPersons={filteredPersons} /> */}
     </Container>
   );
 }
@@ -48,7 +48,8 @@ function SearchList({ filteredPersons }) {
     return <List key={person.userId} person={person} />;
   });
   console.log(filtered);
-  return filtered ? <StyledList>{filtered}</StyledList> : null;
+  // return filtered ? <StyledList>{filtered}</StyledList> : null;
+  return <StyledList>{filtered}</StyledList>;
 }
 
 function List({ person }) {
