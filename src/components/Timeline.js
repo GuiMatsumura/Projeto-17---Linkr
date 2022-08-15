@@ -122,7 +122,11 @@ export default function Timeline() {
                   {showInput && index === inputIndex ? (
                     <input
                       autoFocus
-                      value={newDescription ? newDescription : each.description}
+                      value={
+                        newDescription
+                          ? newDescription
+                          : setTimeout(() => each.description, 1000)
+                      }
                       onKeyDown={(event) => handleKey(event, each.id)}
                       onChange={(e) => setNewDescription(e.target.value)}
                       disabled={inputDisable}
@@ -135,7 +139,18 @@ export default function Timeline() {
                       <h2>{each.description}</h2>
                     </ReactTagify>
                   )}
-
+                  <a href={each.url}>
+                    <div className="metadata">
+                      <div className="metadataInfo">
+                        <h2>Um titulo legal</h2>
+                        <h3>uma descrição legal</h3>
+                        <h4>um link doidao</h4>
+                      </div>
+                      <div className="metadataImg">
+                        <img src={each.foto} />
+                      </div>
+                    </div>
+                  </a>
                   {/* <h3>{each.url}</h3> */}
                 </div>
                 {each.userId === Number(defaultUserId) ? (
@@ -231,6 +246,45 @@ const Container = styled.div`
       color: #b7b7b7;
       font-family: "Lato";
       margin: 7px 0 0 0;
+    }
+    .metadata {
+      display: flex;
+      align-items: center;
+      margin: 10px 0 0 0;
+      width: 100%;
+      height: 100px;
+      background-color: #171717;
+      border: 1px solid #4d4d4d;
+      border-radius: 11px;
+      .metadataInfo {
+        width: 80%;
+        height: 80px;
+        margin: 0 0 0 5px;
+        h2 {
+          font-family: "Lato";
+          font-size: 16px;
+          color: #cecece;
+        }
+        h3 {
+          font-family: "Lato";
+          font-size: 11px;
+          color: #9b9595;
+          margin: 4px 0 0 0;
+        }
+        h4 {
+          font-family: "Lato";
+          font-size: 11px;
+          color: #cecece;
+          margin: 4px 0 0 0;
+        }
+      }
+      .metadataImg {
+        img {
+          width: 100px;
+          height: 100px;
+          border-radius: 0px 12px 13px 0px;
+        }
+      }
     }
   }
   @media (min-width: 600px) {
