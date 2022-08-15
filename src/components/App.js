@@ -8,9 +8,22 @@ import Signup from "./signup";
 export default function App() {
   const [token, setToken] = useState("");
   const [image, setImage] = useState("");
+  const [userId, setUserId] = useState();
+  const [render, setRender] = useState(true);
 
   return (
-    <UserContext.Provider value={{ token, setToken, image, setImage }}>
+    <UserContext.Provider
+      value={{
+        token,
+        setToken,
+        image,
+        setImage,
+        userId,
+        setUserId,
+        render,
+        setRender,
+      }}
+    >
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Signin />} />

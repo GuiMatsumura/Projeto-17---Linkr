@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext.js";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
+import { FiEdit2 } from "react-icons/fi";
 // import { ReactTagify } from 'react-tagify';
 
 import Like from "./like";
@@ -14,7 +17,17 @@ export default function Timeline() {
 
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
-  const token = localStorage.getItem("token");
+  const [showInput, setShowInput] = useState(false);
+  const [newDescription, setNewDescription] = useState("");
+  const [inputIndex, setInputIndex] = useState();
+
+  
+  const { token, render, userId } = useContext(UserContext);
+  const defaultToken = token ? token : localStorage.getItem("token");
+  const defaultUserId = userId ? userId : localStorage.getItem("userId");
+
+  const descRef = useRef();
+
   const tagStyle = {
     color: "#FFFFFF",
     cursor: "pointer",
@@ -22,7 +35,7 @@ export default function Timeline() {
 
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${defaultToken}`,
     },
   };
   useEffect(() => {
@@ -40,8 +53,24 @@ export default function Timeline() {
       );
       navigate("/");
     });
-  }, [/* posts */]);
+  }, [render]);
 
+  function editDescription(index) {
+    setShowInput(!showInput);
+    setInputIndex(index);
+    descRef.current.focus();
+    console.log(descRef.current);
+  }
+
+  function handleKey(event) {
+    if (event.key === "Enter") {
+    }
+    if (event.key === "Escape") {
+      setShowInput(!showInput);
+    }
+  }
+
+  console.log(posts);
   return (
     <>
       <Menu />
@@ -66,9 +95,21 @@ export default function Timeline() {
               </div>
               <div className="postDescription">
                 <h1>{each.name}</h1>
-                <h2>{each.description}</h2>
+                {showInput && index === inputIndex ? (
+                  <input
+                    ref={descRef}
+                    value={each.description}
+                    onKeyPress={handleKey}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                  />
+                ) : (
+                  <h2>{each.description}</h2>
+                )}
                 {/* <h3>{each.url}</h3> */}
               </div>
+              {each.userId === Number(defaultUserId) ? (
+                <StyledEdit onClick={() => editDescription(index)} />
+              ) : null}
             </div>
           ))}
         </Container>
@@ -113,6 +154,7 @@ const Container = styled.div`
     margin: 20px 0 20px 0;
     font-family: "Oswald";
     font-weight: 700;
+    position: relative;
   }
   .avatar {
     width: 20%;
@@ -183,4 +225,11 @@ const NoPost = styled.div`
     font-size: 20px;
     margin: 20px 0 0 0;
   }
+`;
+
+const StyledEdit = styled(FiEdit2)`
+  position: absolute;
+  color: white;
+  top: 24px;
+  right: 50px;
 `;
