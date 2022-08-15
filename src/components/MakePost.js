@@ -77,7 +77,7 @@ async function handleSubmit(
     description,
   };
   try {
-    await axios.post("http://localhost:4000/post", body, config);
+    await axios.post("https://back-linkr-10.herokuapp.com/post", body, config);
     setUrl("");
     setDescription("");
     setDisable(false);

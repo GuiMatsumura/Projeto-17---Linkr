@@ -40,7 +40,7 @@ export default function Search({ display }) {
 
 async function getUsers() {
   try {
-    const response = await axios.get("http://localhost:4000/users");
+    const response = await axios.get("https://back-linkr-10.herokuapp.com/users");
     return response.data;
   } catch (error) {
     console.log(error);

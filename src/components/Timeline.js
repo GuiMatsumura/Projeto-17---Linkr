@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
@@ -7,7 +7,7 @@ import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import { ReactTagify } from "react-tagify";
 import HashtagContext from "../contexts/HashtagContext.js";
-
+import Search from "./Search.js";
 import Like from "./like";
 import MakePost from "./MakePost";
 import Menu from "./menu/index.jsx";
@@ -26,8 +26,9 @@ export default function Timeline() {
   const { token, userId } = useContext(UserContext);
   const defaultToken = token ? token : localStorage.getItem("token");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
+  const [windowWidth, setWindowWidth] = useState(getWindowWidth());
+  const [display, setDisplay] = useState("flex");
 
-  const descRef = useRef(null);
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
@@ -39,13 +40,30 @@ export default function Timeline() {
       : setControlEffect(!controlEffect);
   }
 
+
+  function getWindowWidth() {
+    const { innerWidth: width } = window;
+    return width;
+  }
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(getWindowWidth());
+    }
+
+    windowWidth < 600 ? setDisplay("flex") : setDisplay("none");
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowWidth]);
+
   const config = {
     headers: {
       Authorization: `Bearer ${defaultToken}`,
     },
   };
   useEffect(() => {
-    const promise = axios.get("http://localhost:4000/timeline", config);
+    const promise = axios.get("https://back-linkr-10.herokuapp.com/timeline", config);
 
     promise.then((res) => {
       setPosts(res.data);
@@ -75,7 +93,7 @@ export default function Timeline() {
       };
       try {
         console.log("tentando");
-        await axios.put("http://localhost:4000/post", body, config);
+        await axios.put("https://back-linkr-10.herokuapp.com/post", body, config);
         setShowInput(false);
         setNewDescription("");
         setInputDisable(false);
@@ -99,6 +117,8 @@ export default function Timeline() {
       <ScreenName>
         <h2>timeline</h2>
       </ScreenName>
+      <Search display={display} />
+
       <MakePost />
       {/* <Like></Like> */}
       {havePost ? (

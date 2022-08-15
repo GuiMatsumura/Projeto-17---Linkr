@@ -27,7 +27,7 @@ export default function Signin() {
 
     setLoading(true);
 
-    const LINK_API = "http://localhost:4000/signin";
+    const LINK_API = "https://back-linkr-10.herokuapp.com/signin";
 
     const request = axios.post(LINK_API, {
       email,
