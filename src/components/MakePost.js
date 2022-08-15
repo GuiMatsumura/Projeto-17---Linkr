@@ -1,16 +1,16 @@
-import { useState, useContext } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import UserContext from "../contexts/UserContext";
+import { useState, useContext } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import UserContext from '../contexts/UserContext';
 export default function MakePost() {
   const [disable, setDisable] = useState(false);
-  const [buttonCtt, setButtonCtt] = useState("Publish");
+  const [buttonCtt, setButtonCtt] = useState('Publish');
 
-  const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState('');
+  const [description, setDescription] = useState('');
 
-  const image = localStorage.getItem("image");
-  const token = localStorage.getItem("token");
+  const image = localStorage.getItem('image');
+  const token = localStorage.getItem('token');
   return (
     <Container>
       <img src={image} alt="Profile" />
@@ -65,27 +65,27 @@ async function handleSubmit(
 ) {
   let config = {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: 'Bearer ' + token,
     },
   };
   event.preventDefault();
   setDisable(true);
-  setButtonCtt("Publishing...");
+  setButtonCtt('Publishing...');
   const body = {
     url,
     description,
   };
   try {
-    await axios.post("http://localhost:4000/post", body, config);
-    setUrl("");
-    setDescription("");
+    await axios.post('http://localhost:4000/post', body, config);
+    setUrl('');
+    setDescription('');
     setDisable(false);
-    setButtonCtt("Publish");
+    setButtonCtt('Publish');
   } catch (error) {
     console.log(error);
-    alert("Houve um erro ao publicar seu link: " + error.response.data);
+    alert('Houve um erro ao publicar seu link: ' + error.response.data);
     setDisable(false);
-    setButtonCtt("Publish");
+    setButtonCtt('Publish');
   }
 }
 
@@ -99,7 +99,7 @@ const Container = styled.div`
   color: #707070;
   display: flex;
   border-radius: 16px;
-  font-family: "Lato", sans-serif;
+  font-family: 'Lato', sans-serif;
   img {
     border-radius: 50%;
     width: 50px;
@@ -108,7 +108,6 @@ const Container = styled.div`
   }
   div {
     width: 100%;
-
     h2 {
       text-align: start;
       font-size: 20px;
@@ -131,7 +130,6 @@ const Container = styled.div`
         border: none;
         border-radius: 5px;
         height: 31px;
-
         &:disabled {
           background-color: #8caeda;
         }
@@ -142,10 +140,9 @@ const Container = styled.div`
         border-radius: 5px;
         border: none;
         background-color: #efefef;
-
         &::placeholder {
           color: #949494;
-          font-family: "Lato", sans-serif;
+          font-family: 'Lato', sans-serif;
         }
         &:disabled {
           background-color: #dbdada;
