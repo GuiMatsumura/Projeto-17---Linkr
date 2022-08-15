@@ -43,6 +43,7 @@ export default function Timeline() {
   }, [/* posts */]);
 
   return (
+    // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
     <>
       <Menu />
       <ScreenName>
