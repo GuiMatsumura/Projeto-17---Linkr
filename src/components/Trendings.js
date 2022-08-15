@@ -11,7 +11,7 @@ export default function Trending() {
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
   function navigateTag(tag) {
-    setHashtagClicked(tag.name.replace('{', '').replace('}', ''));
+    setHashtagClicked(tag.name);
     console.log(hashtagClicked);
     navigate(`/hashtag/${hashtagClicked}`);
   }
@@ -37,7 +37,7 @@ export default function Trending() {
       <ul>
         {trending.map((each, index) => (
           <li key={index} onClick={() => navigateTag(each)}>
-            # {each.name.replace('}', '').replace('{', '')}
+            # {each.name}
           </li>
         ))}
       </ul>
