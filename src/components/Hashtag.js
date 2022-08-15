@@ -1,18 +1,19 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { IoHeartOutline, IoHeart } from 'react-icons/io5';
+import { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { IoHeartOutline } from 'react-icons/io5';
 import { ReactTagify } from 'react-tagify';
 import HashtagContext from '../contexts/HashtagContext.js';
 
 import Like from './like';
-import MakePost from './MakePost';
 import Menu from './menu/index.jsx';
 import Trending from './Trendings.js';
 
-export default function Timeline() {
+export default function Hashtag() {
   const navigate = useNavigate();
+
+  const { hashtag } = useParams();
 
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
@@ -20,19 +21,23 @@ export default function Timeline() {
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
+  const obj = {
+    hashtag: hashtagClicked,
+  };
+
   function navigateTag(tag) {
     setHashtagClicked(tag.replace('#', ''));
+    obj.hashtag = hashtagClicked;
     console.log(hashtagClicked);
-    hashtagClicked
-      ? navigate(`/hashtag/${hashtagClicked}`)
-      : setControlEffect(!controlEffect);
+    navigate(`/hashtag/${hashtagClicked}`);
   }
 
   useEffect(() => {
-    const promise = axios.get('http://localhost:6007/timeline');
+    const promise = axios.get('http://localhost:6007/hashtag', obj);
 
     promise.then((res) => {
       setPosts(res.data);
+
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
       havePost ? console.log('ok') : setControlEffect(!controlEffect);
     });
@@ -48,9 +53,8 @@ export default function Timeline() {
     <>
       <Menu />
       <ScreenName>
-        <h2>timeline</h2>
+        <h2># {hashtag}</h2>
       </ScreenName>
-      <MakePost />
       {/* <Like></Like> */}
       {havePost ? (
         // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
@@ -80,7 +84,6 @@ export default function Timeline() {
               </div>
             ))}
           </Container>
-          {/* trendi */}
           <Trending />
         </SuperContainer>
       ) : (
@@ -99,6 +102,7 @@ const ScreenName = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0 0 11px;
+  margin: -1px 0 -1px 0;
   h2 {
     font-weight: 700;
     font-size: 33px;
@@ -121,7 +125,7 @@ const Container = styled.div`
     width: 100vw;
     height: 30vh;
     display: flex;
-    margin: 20px 0 20px 0;
+    margin: 0 0 20px 0;
     font-family: 'Oswald';
     font-weight: 700;
   }
