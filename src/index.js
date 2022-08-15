@@ -11,7 +11,6 @@ function App() {
       <BrowserRouter>
         <Routes>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/teste" element={<DeleteModal />} />
         </Routes>
       </BrowserRouter>
   )
