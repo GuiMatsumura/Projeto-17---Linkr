@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiTrash } from "react-icons/fi";
 import { ReactTagify } from "react-tagify";
 import HashtagContext from "../contexts/HashtagContext.js";
 
@@ -22,7 +22,7 @@ export default function Timeline() {
   const [showInput, setShowInput] = useState(false);
   const [newDescription, setNewDescription] = useState("");
   const [inputIndex, setInputIndex] = useState();
-
+  const [inputDisable, setInputDisable] = useState(false);
   const { token, userId } = useContext(UserContext);
   const defaultToken = token ? token : localStorage.getItem("token");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
@@ -68,13 +68,22 @@ export default function Timeline() {
 
   async function handleKey(event, id) {
     if (event.key === "Enter") {
+      setInputDisable(!inputDisable);
       const body = {
         description: newDescription,
         postId: id,
       };
-      console.log(newDescription);
-      console.log(id);
-      // await axios.put("http://localhost:4000/post", config);
+      try {
+        console.log("tentando");
+        await axios.put("http://localhost:4000/post", body, config);
+        setShowInput(false);
+        setNewDescription("");
+        setInputDisable(false);
+        setControlEffect(!controlEffect);
+      } catch (error) {
+        setInputDisable(false);
+        alert("Não foi possível salvar suas alterações");
+      }
     }
     if (event.key === "Escape") {
       console.log(showInput);
@@ -116,6 +125,7 @@ export default function Timeline() {
                       value={newDescription ? newDescription : each.description}
                       onKeyDown={(event) => handleKey(event, each.id)}
                       onChange={(e) => setNewDescription(e.target.value)}
+                      disabled={inputDisable}
                     />
                   ) : (
                     <ReactTagify
@@ -129,7 +139,10 @@ export default function Timeline() {
                   {/* <h3>{each.url}</h3> */}
                 </div>
                 {each.userId === Number(defaultUserId) ? (
-                  <StyledEdit onClick={() => editDescription(index)} />
+                  <>
+                    <StyledEdit onClick={() => editDescription(index)} />
+                    <StyledDelete />
+                  </>
                 ) : null}
               </div>
             ))}
@@ -261,4 +274,11 @@ const StyledEdit = styled(FiEdit2)`
   color: white;
   top: 24px;
   right: 50px;
+`;
+
+const StyledDelete = styled(FiTrash)`
+  position: absolute;
+  color: white;
+  top: 24px;
+  right: 20px;
 `;
