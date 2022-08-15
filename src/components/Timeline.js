@@ -22,10 +22,7 @@ export default function Timeline() {
 
   function navigateTag(tag) {
     setHashtagClicked(tag.replace('#', ''));
-    console.log(hashtagClicked);
-    hashtagClicked
-      ? navigate(`/hashtag/${hashtagClicked}`)
-      : setControlEffect(!controlEffect);
+    navigate(`/hashtag/${tag.replace('#', '')}`);
   }
 
   useEffect(() => {

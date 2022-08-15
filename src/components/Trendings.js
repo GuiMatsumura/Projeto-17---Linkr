@@ -7,13 +7,14 @@ import HashtagContext from '../contexts/HashtagContext.js';
 export default function Trending() {
   const navigate = useNavigate();
   const [trending, setTrending] = useState([]);
+  const [controlEffect, setControlEffect] = useState(false);
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
   function navigateTag(tag) {
     setHashtagClicked(tag.name);
-    console.log(hashtagClicked);
-    navigate(`/hashtag/${hashtagClicked}`);
+    //setControlEffect(!controlEffect);
+    navigate(`/hashtag/${tag.name}`);
   }
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function Trending() {
       );
       navigate('/');
     });
-  }, []);
+  }, [controlEffect]);
 
   return (
     <Trendings>
