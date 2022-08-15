@@ -34,7 +34,7 @@ export default function Hashtag() {
   }
 
   useEffect(() => {
-    const promise = axios.get(`http://localhost:6007/hashtag/${x}`);
+    const promise = axios.get('https://back-linkr-10.herokuapp.com/hashtag', obj);
 
     promise.then((res) => {
       setPosts(res.data);
