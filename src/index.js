@@ -11,7 +11,6 @@ function App() {
         <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile/:id" element={<UserProfile />} />
-        <Route path="teste" element={<Trending />}/>
         </Routes>
       </BrowserRouter>
   )
