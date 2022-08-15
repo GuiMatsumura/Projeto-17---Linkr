@@ -4,23 +4,26 @@ import { ThreeDots } from 'react-loader-spinner';
 
 import { Background, Box, Text, Buttons } from "./style";
 
-export default function DeleteModal() {
+export default function DeleteModal({ setIsModalOpen, id }) {
   const [loading, setLoading] = useState(false);
-  /* const config = {
+  const token = localStorage.getItem("token");
+  const config = {
     headers: {
-      Authorization: `Bearer ${dataStorage.token}`
+      Authorization: `Bearer ${token}`
     }
-  }; */
+  };
+
+  console.log(token)
 
   function deletePost(id) {
-    const LINK_API = "BOTAR O LINK";
+    const LINK_API = `http://localhost:4000/delete/${id}`;
     const request = axios.delete(LINK_API, config);
     setLoading(true);
 
     request.then(response => {
       setLoading(false);
+      setIsModalOpen(false);
       window.location.reload()
-      //FALTA FECHAR O MODAL
     });
     request.catch(err => {
       console.log(err.response);
