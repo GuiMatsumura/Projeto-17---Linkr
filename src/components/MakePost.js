@@ -8,7 +8,7 @@ export default function MakePost() {
 
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
-  const { image, token, setRender, render } = useContext(UserContext);
+  const { image, token } = useContext(UserContext);
   const defaultImage = image ? image : localStorage.getItem("image");
   const defaultToken = token ? token : localStorage.getItem("token");
 
@@ -27,9 +27,7 @@ export default function MakePost() {
               setDescription,
               url,
               description,
-              defaultToken,
-              setRender,
-              render
+              defaultToken
             )
           }
         >
@@ -64,9 +62,7 @@ async function handleSubmit(
   setDescription,
   url,
   description,
-  defaultToken,
-  setRender,
-  render
+  defaultToken
 ) {
   let config = {
     headers: {
@@ -86,7 +82,6 @@ async function handleSubmit(
     setDescription("");
     setDisable(false);
     setButtonCtt("Publish");
-    setRender(!render);
   } catch (error) {
     console.log(error);
     alert("Houve um erro ao publicar seu link: " + error.response.data);

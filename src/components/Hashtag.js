@@ -1,96 +1,60 @@
-import styled from "styled-components";
-import { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import UserContext from "../contexts/UserContext.js";
-import { IoHeartOutline, IoHeart } from "react-icons/io5";
-import { FiEdit2 } from "react-icons/fi";
-import { ReactTagify } from "react-tagify";
-import HashtagContext from "../contexts/HashtagContext.js";
+import styled from 'styled-components';
+import axios from 'axios';
+import { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { IoHeartOutline } from 'react-icons/io5';
+import { ReactTagify } from 'react-tagify';
+import HashtagContext from '../contexts/HashtagContext.js';
 
-import Like from "./like";
-import MakePost from "./MakePost";
-import Menu from "./menu/index.jsx";
-import Trending from "./Trendings.js";
+import Like from './like';
+import Menu from './menu/index.jsx';
+import Trending from './Trendings.js';
 
-export default function Timeline() {
+export default function Hashtag() {
   const navigate = useNavigate();
+
+  const { hashtag } = useParams();
 
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
   const [controlEffect, setControlEffect] = useState(false);
-  const [showInput, setShowInput] = useState(false);
-  const [newDescription, setNewDescription] = useState("");
-  const [inputIndex, setInputIndex] = useState();
-
-  const { token, userId } = useContext(UserContext);
-  const defaultToken = token ? token : localStorage.getItem("token");
-  const defaultUserId = userId ? userId : localStorage.getItem("userId");
-
-  const descRef = useRef(null);
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
+  const obj = {
+    hashtag: hashtagClicked,
+  };
+
   function navigateTag(tag) {
-    setHashtagClicked(tag.replace("#", ""));
+    setHashtagClicked(tag.replace('#', ''));
+    obj.hashtag = hashtagClicked;
     console.log(hashtagClicked);
-    hashtagClicked
-      ? navigate(`/hashtag/${hashtagClicked}`)
-      : setControlEffect(!controlEffect);
+    navigate(`/hashtag/${hashtagClicked}`);
   }
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${defaultToken}`,
-    },
-  };
   useEffect(() => {
-    const promise = axios.get("http://localhost:4000/timeline", config);
+    const promise = axios.get('http://localhost:4000/hashtag', obj);
 
     promise.then((res) => {
       setPosts(res.data);
+
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
-      havePost ? console.log("ok") : setControlEffect(!controlEffect);
+      havePost ? console.log('ok') : setControlEffect(!controlEffect);
     });
     promise.catch((err) => {
       alert(
-        "An error occured while trying to fetch the posts, please refresh the page"
+        'An error occured while trying to fetch the posts, please refresh the page'
       );
-      navigate("/");
+      navigate('/');
     });
   }, [controlEffect]);
 
-  function editDescription(index) {
-    setShowInput(!showInput);
-    setInputIndex(index);
-    setNewDescription("");
-  }
-
-  async function handleKey(event, id) {
-    if (event.key === "Enter") {
-      const body = {
-        description: newDescription,
-        postId: id,
-      };
-      console.log(newDescription);
-      console.log(id);
-      // await axios.put("http://localhost:4000/post", config);
-    }
-    if (event.key === "Escape") {
-      console.log(showInput);
-      setShowInput(!showInput);
-      setNewDescription("");
-    }
-  }
-
-  console.log(posts);
   return (
     <>
       <Menu />
       <ScreenName>
-        <h2>timeline</h2>
+        <h2># {hashtag}</h2>
       </ScreenName>
-      <MakePost />
       {/* <Like></Like> */}
       {havePost ? (
         // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
@@ -109,32 +73,17 @@ export default function Timeline() {
                 </div>
                 <div className="postDescription">
                   <h1>{each.name}</h1>
-
-                  {showInput && index === inputIndex ? (
-                    <input
-                      autoFocus
-                      value={newDescription ? newDescription : each.description}
-                      onKeyDown={(event) => handleKey(event, each.id)}
-                      onChange={(e) => setNewDescription(e.target.value)}
-                    />
-                  ) : (
-                    <ReactTagify
-                      colors={"#ffffff"}
-                      tagClicked={(tag) => navigateTag(tag)}
-                    >
-                      <h2>{each.description}</h2>
-                    </ReactTagify>
-                  )}
-
+                  <ReactTagify
+                    colors={'#ffffff'}
+                    tagClicked={(tag) => navigateTag(tag)}
+                  >
+                    <h2>{each.description}</h2>
+                  </ReactTagify>
                   {/* <h3>{each.url}</h3> */}
                 </div>
-                {each.userId === Number(defaultUserId) ? (
-                  <StyledEdit onClick={() => editDescription(index)} />
-                ) : null}
               </div>
             ))}
           </Container>
-          {/* trendi */}
           <Trending />
         </SuperContainer>
       ) : (
@@ -153,6 +102,7 @@ const ScreenName = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0 0 11px;
+  margin: -1px 0 -1px 0;
   h2 {
     font-weight: 700;
     font-size: 33px;
@@ -175,10 +125,9 @@ const Container = styled.div`
     width: 100vw;
     height: 30vh;
     display: flex;
-    margin: 20px 0 20px 0;
-    font-family: "Oswald";
+    margin: 0 0 20px 0;
+    font-family: 'Oswald';
     font-weight: 700;
-    position: relative;
   }
   .avatar {
     width: 20%;
@@ -189,7 +138,7 @@ const Container = styled.div`
       margin-top: 10px;
       color: white;
       font-size: 12px;
-      font-family: "Lato";
+      font-family: 'Lato';
     }
   }
   .avatarImg {
@@ -211,12 +160,12 @@ const Container = styled.div`
       color: #ffffff;
       font-size: 25px;
       margin: 12px 0 0 0;
-      font-family: "Lato";
+      font-family: 'Lato';
     }
     h2 {
       font-size: 20px;
       color: #b7b7b7;
-      font-family: "Lato";
+      font-family: 'Lato';
       margin: 7px 0 0 0;
     }
   }
@@ -244,7 +193,7 @@ const NoPost = styled.div`
   justify-content: center;
   text-align: center;
   h3 {
-    font-family: "Lato";
+    font-family: 'Lato';
     color: #b7b7b7;
     font-size: 20px;
     margin: 20px 0 0 0;
@@ -254,11 +203,4 @@ const SuperContainer = styled.div`
   display: flex;
   background-color: #333333;
   position: relative;
-`;
-
-const StyledEdit = styled(FiEdit2)`
-  position: absolute;
-  color: white;
-  top: 24px;
-  right: 50px;
 `;
