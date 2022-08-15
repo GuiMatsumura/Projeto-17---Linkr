@@ -25,11 +25,12 @@ export default function Hashtag() {
     hashtag: hashtagClicked,
   };
 
+  let x = hashtag;
+
   function navigateTag(tag) {
     setHashtagClicked(tag.replace('#', ''));
-    obj.hashtag = hashtagClicked;
-    console.log(hashtagClicked);
-    navigate(`/hashtag/${hashtagClicked}`);
+    x = tag.replace('#', '');
+    navigate(`/hashtag/${tag.replace('#', '')}`);
   }
 
   useEffect(() => {

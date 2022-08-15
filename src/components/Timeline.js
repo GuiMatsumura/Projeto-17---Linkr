@@ -63,7 +63,7 @@ export default function Timeline() {
     },
   };
   useEffect(() => {
-    const promise = axios.get("https://back-linkr-10.herokuapp.com/timeline", config);
+    const promise = axios.get('https://back-linkr-10.herokuapp.com/timeline', config);
 
     promise.then((res) => {
       setPosts(res.data);
@@ -72,9 +72,9 @@ export default function Timeline() {
     });
     promise.catch((err) => {
       alert(
-        "An error occured while trying to fetch the posts, please refresh the page"
+        'An error occured while trying to fetch the posts, please refresh the page'
       );
-      navigate("/");
+      navigate('/');
     });
   }, [controlEffect]);
 
@@ -112,6 +112,7 @@ export default function Timeline() {
 
   console.log(posts);
   return (
+    // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
     <>
       <Menu />
       <ScreenName>
@@ -224,7 +225,7 @@ const Container = styled.div`
     height: 30vh;
     display: flex;
     margin: 20px 0 20px 0;
-    font-family: "Oswald";
+    font-family: 'Oswald';
     font-weight: 700;
     position: relative;
   }
@@ -237,7 +238,7 @@ const Container = styled.div`
       margin-top: 10px;
       color: white;
       font-size: 12px;
-      font-family: "Lato";
+      font-family: 'Lato';
     }
   }
   .avatarImg {
@@ -259,12 +260,12 @@ const Container = styled.div`
       color: #ffffff;
       font-size: 25px;
       margin: 12px 0 0 0;
-      font-family: "Lato";
+      font-family: 'Lato';
     }
     h2 {
       font-size: 20px;
       color: #b7b7b7;
-      font-family: "Lato";
+      font-family: 'Lato';
       margin: 7px 0 0 0;
     }
     .metadata {
@@ -331,7 +332,7 @@ const NoPost = styled.div`
   justify-content: center;
   text-align: center;
   h3 {
-    font-family: "Lato";
+    font-family: 'Lato';
     color: #b7b7b7;
     font-size: 20px;
     margin: 20px 0 0 0;
