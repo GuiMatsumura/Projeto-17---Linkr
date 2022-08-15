@@ -12,44 +12,46 @@ export default function MakePost() {
   const image = localStorage.getItem('image');
   const token = localStorage.getItem('token');
   return (
-    <Container>
-      <img src={image} alt="Profile" />
-      <div>
-        <h2>What are you going to share today?</h2>
-        <form
-          onSubmit={(event) =>
-            handleSubmit(
-              event,
-              setButtonCtt,
-              setDisable,
-              setUrl,
-              setDescription,
-              url,
-              description,
-              token
-            )
-          }
-        >
-          <input
-            type="text"
-            placeholder="http://..."
-            required
-            disabled={disable}
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-          <textarea
-            placeholder="Awesome article about #javascript"
-            disabled={disable}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button type="submit" disabled={disable}>
-            {buttonCtt}
-          </button>
-        </form>
-      </div>
-    </Container>
+    <SuperContainer>
+      <Container>
+        <img src={image} alt="Profile" />
+        <div>
+          <h2>What are you going to share today?</h2>
+          <form
+            onSubmit={(event) =>
+              handleSubmit(
+                event,
+                setButtonCtt,
+                setDisable,
+                setUrl,
+                setDescription,
+                url,
+                description,
+                token
+              )
+            }
+          >
+            <input
+              type="text"
+              placeholder="http://..."
+              required
+              disabled={disable}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+            <textarea
+              placeholder="Awesome article about #javascript"
+              disabled={disable}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <button type="submit" disabled={disable}>
+              {buttonCtt}
+            </button>
+          </form>
+        </div>
+      </Container>
+    </SuperContainer>
   );
 }
 
@@ -170,5 +172,15 @@ const Container = styled.div`
         padding-left: 22px;
       }
     }
+  }
+  @media (min-width: 600px) {
+  }
+`;
+
+const SuperContainer = styled.div`
+  @media (min-width: 600px) {
+    display: flex;
+    justify-content: center;
+    background-color: #333333;
   }
 `;

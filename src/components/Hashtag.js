@@ -1,41 +1,44 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { IoHeartOutline, IoHeart } from 'react-icons/io5';
+import { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { IoHeartOutline } from 'react-icons/io5';
 import { ReactTagify } from 'react-tagify';
 import HashtagContext from '../contexts/HashtagContext.js';
 
 import Like from './like';
-import MakePost from './MakePost';
 import Menu from './menu/index.jsx';
 import Trending from './Trendings.js';
 
-export default function Timeline() {
+export default function Hashtag() {
   const navigate = useNavigate();
+
+  const { hashtag } = useParams();
 
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
   const [controlEffect, setControlEffect] = useState(false);
-  const token = localStorage.getItem('token');
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
+  const obj = {
+    hashtag: hashtagClicked,
+  };
+
+  let x = hashtag;
+
   function navigateTag(tag) {
     setHashtagClicked(tag.replace('#', ''));
+    x = tag.replace('#', '');
     navigate(`/hashtag/${tag.replace('#', '')}`);
   }
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
   useEffect(() => {
-    const promise = axios.get('http://localhost:4000/timeline', config);
+    const promise = axios.get(`http://localhost:6007/hashtag/${x}`);
 
     promise.then((res) => {
       setPosts(res.data);
+
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
       havePost ? console.log('ok') : setControlEffect(!controlEffect);
     });
@@ -48,13 +51,11 @@ export default function Timeline() {
   }, [controlEffect]);
 
   return (
-    // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
     <>
       <Menu />
       <ScreenName>
-        <h2>timeline</h2>
+        <h2># {hashtag}</h2>
       </ScreenName>
-      <MakePost />
       {/* <Like></Like> */}
       {havePost ? (
         // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
@@ -79,24 +80,11 @@ export default function Timeline() {
                   >
                     <h2>{each.description}</h2>
                   </ReactTagify>
-                  <a href={each.url}>
-                    <div className="metadata">
-                      <div className="metadataInfo">
-                        <h2>Um titulo legal</h2>
-                        <h3>uma descrição legal</h3>
-                        <h4>um link doidao</h4>
-                      </div>
-                      <div className="metadataImg">
-                        <img src={each.foto} />
-                      </div>
-                    </div>
-                  </a>
                   {/* <h3>{each.url}</h3> */}
                 </div>
               </div>
             ))}
           </Container>
-          {/* trendi */}
           <Trending />
         </SuperContainer>
       ) : (
@@ -115,6 +103,7 @@ const ScreenName = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0 0 11px;
+  margin: -1px 0 -1px 0;
   h2 {
     font-weight: 700;
     font-size: 33px;
@@ -137,7 +126,7 @@ const Container = styled.div`
     width: 100vw;
     height: 30vh;
     display: flex;
-    margin: 20px 0 20px 0;
+    margin: 0 0 20px 0;
     font-family: 'Oswald';
     font-weight: 700;
   }
@@ -179,45 +168,6 @@ const Container = styled.div`
       color: #b7b7b7;
       font-family: 'Lato';
       margin: 7px 0 0 0;
-    }
-    .metadata {
-      display: flex;
-      align-items: center;
-      margin: 10px 0 0 0;
-      width: 100%;
-      height: 100px;
-      background-color: #171717;
-      border: 1px solid #4d4d4d;
-      border-radius: 11px;
-      .metadataInfo {
-        width: 80%;
-        height: 80px;
-        margin: 0 0 0 5px;
-        h2 {
-          font-family: 'Lato';
-          font-size: 16px;
-          color: #cecece;
-        }
-        h3 {
-          font-family: 'Lato';
-          font-size: 11px;
-          color: #9b9595;
-          margin: 4px 0 0 0;
-        }
-        h4 {
-          font-family: 'Lato';
-          font-size: 11px;
-          color: #cecece;
-          margin: 4px 0 0 0;
-        }
-      }
-      .metadataImg {
-        img {
-          width: 100px;
-          height: 100px;
-          border-radius: 0px 12px 13px 0px;
-        }
-      }
     }
   }
   @media (min-width: 600px) {

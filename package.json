@@ -16,6 +16,7 @@
     "react-scripts": "^4.0.3",
     "react-tooltip": "^4.2.21",
     "react-tagify": "^0.1.4",
+    "react-tooltip": "^4.2.21",
     "styled-components": "^5.3.5"
   },
   "scripts": {
