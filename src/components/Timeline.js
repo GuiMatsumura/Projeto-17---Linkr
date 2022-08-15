@@ -17,6 +17,7 @@ export default function Timeline() {
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
   const [controlEffect, setControlEffect] = useState(false);
+  const token = localStorage.getItem('token');
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
@@ -25,8 +26,13 @@ export default function Timeline() {
     navigate(`/hashtag/${tag.replace('#', '')}`);
   }
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   useEffect(() => {
-    const promise = axios.get('http://localhost:6007/timeline');
+    const promise = axios.get('http://localhost:4000/timeline', config);
 
     promise.then((res) => {
       setPosts(res.data);
@@ -42,6 +48,7 @@ export default function Timeline() {
   }, [controlEffect]);
 
   return (
+    // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
     <>
       <Menu />
       <ScreenName>
