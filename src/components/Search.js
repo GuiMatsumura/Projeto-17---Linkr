@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
+import { Link } from "react-router-dom";
 export default function Search({ display }) {
   const [searchField, setSearchField] = useState("");
   const [filteredPersons, setFilteredPersons] = useState([]);
@@ -57,12 +58,15 @@ function SearchList({ filteredPersons, searchField }) {
 
 function List({ person }) {
   return (
-    <li>
-      <img src={person.photo} />
-      <h2>{person.username}</h2>
-    </li>
+    <Link to={`/user/${person.userId}`}>
+      <li>
+        <img src={person.photo} />
+        <h2>{person.username}</h2>
+      </li>
+    </Link>
   );
 }
+
 
 const Container = styled.div`
   display: ${(props) => props.display};
