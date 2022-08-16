@@ -54,6 +54,7 @@ const Trendings = styled.div`
   width: 301px;
   height: 406px;
   border-radius: 16px;
+  margin-left: 50px;
   h1 {
     font-family: 'Oswald';
     font-style: normal;

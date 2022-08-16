@@ -56,13 +56,13 @@ function SearchList({ filteredPersons, searchField }) {
   return searchField ? <StyledList>{filtered}</StyledList> : null;
 }
 
-function List({ person, key }) {
+function List({ person }) {
   return (
-    <Link to={`/profile/${key}`}>
-    <li>
-      <img src={person.photo} />
-      <h2>{person.username}</h2>
-    </li>
+    <Link to={`/user/${person.userId}`}>
+      <li>
+        <img src={person.photo} />
+        <h2>{person.username}</h2>
+      </li>
     </Link>
   );
 }

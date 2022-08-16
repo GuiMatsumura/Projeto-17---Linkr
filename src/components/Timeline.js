@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
@@ -138,7 +138,9 @@ export default function Timeline() {
                   <h3>13 likes</h3>
                 </div>
                 <div className="postDescription">
-                  <h1>{each.name}</h1>
+                  <Link to={`/user/${each.userId}`}>
+                    <h1>{each.name}</h1>
+                  </Link>
 
                   {showInput && index === inputIndex ? (
                     <input
