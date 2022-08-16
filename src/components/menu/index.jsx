@@ -2,7 +2,7 @@ import { MenuBox, ProfileMenu } from "./style";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { PopUpMenu } from "./popupmenu";
 import { useContext, useState, useEffect } from "react";
-import Search from "../Search.js"
+import Search from "../Search.js";
 import UserContext from "../../contexts/UserContext";
 
 export default function Menu() {
@@ -23,6 +23,9 @@ export default function Menu() {
 
     windowWidth < 600 ? setDisplay("none") : setDisplay("flex");
     window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [windowWidth]);
 
   function makeIcon() {
