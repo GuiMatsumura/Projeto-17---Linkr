@@ -1,20 +1,21 @@
-import { useState, useContext } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import UserContext from '../contexts/UserContext';
+import { useState, useContext } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import UserContext from "../contexts/UserContext";
 export default function MakePost() {
   const [disable, setDisable] = useState(false);
-  const [buttonCtt, setButtonCtt] = useState('Publish');
+  const [buttonCtt, setButtonCtt] = useState("Publish");
 
-  const [url, setUrl] = useState('');
-  const [description, setDescription] = useState('');
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const { image, token } = useContext(UserContext);
+  const defaultImage = image ? image : localStorage.getItem("image");
+  const defaultToken = token ? token : localStorage.getItem("token");
 
-  const image = localStorage.getItem('image');
-  const token = localStorage.getItem('token');
   return (
     <SuperContainer>
       <Container>
-        <img src={image} alt="Profile" />
+        <img src={defaultImage} alt="Profile" />
         <div>
           <h2>What are you going to share today?</h2>
           <form
@@ -27,7 +28,7 @@ export default function MakePost() {
                 setDescription,
                 url,
                 description,
-                token
+                defaultToken
               )
             }
           >
@@ -63,31 +64,31 @@ async function handleSubmit(
   setDescription,
   url,
   description,
-  token
+  defaultToken
 ) {
   let config = {
     headers: {
-      Authorization: 'Bearer ' + token,
+      Authorization: "Bearer " + defaultToken,
     },
   };
   event.preventDefault();
   setDisable(true);
-  setButtonCtt('Publishing...');
+  setButtonCtt("Publishing...");
   const body = {
     url,
     description,
   };
   try {
-    await axios.post('http://localhost:4000/post', body, config);
-    setUrl('');
-    setDescription('');
+    await axios.post("https://back-linkr-10.herokuapp.com/post", body, config);
+    setUrl("");
+    setDescription("");
     setDisable(false);
-    setButtonCtt('Publish');
+    setButtonCtt("Publish");
   } catch (error) {
     console.log(error);
-    alert('Houve um erro ao publicar seu link: ' + error.response.data);
+    alert("Houve um erro ao publicar seu link: " + error.response.data);
     setDisable(false);
-    setButtonCtt('Publish');
+    setButtonCtt("Publish");
   }
 }
 
@@ -101,7 +102,7 @@ const Container = styled.div`
   color: #707070;
   display: flex;
   border-radius: 16px;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   img {
     border-radius: 50%;
     width: 50px;
@@ -144,7 +145,7 @@ const Container = styled.div`
         background-color: #efefef;
         &::placeholder {
           color: #949494;
-          font-family: 'Lato', sans-serif;
+          font-family: "Lato", sans-serif;
         }
         &:disabled {
           background-color: #dbdada;
