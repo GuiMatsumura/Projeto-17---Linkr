@@ -82,12 +82,12 @@ export default function Timeline() {
                   <a href={each.url}>
                     <div className="metadata">
                       <div className="metadataInfo">
-                        <h2>Um titulo legal</h2>
-                        <h3>uma descrição legal</h3>
-                        <h4>um link doidao</h4>
+                        <h2>{each.metadataTitle}</h2>
+                        <h3>{each.metadataDescription}</h3>
+                        <h4>{each.url}</h4>
                       </div>
                       <div className="metadataImg">
-                        <img src={each.foto} />
+                        <img src={each.metadataImg} />
                       </div>
                     </div>
                   </a>
