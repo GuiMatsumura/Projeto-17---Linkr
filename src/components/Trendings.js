@@ -9,10 +9,10 @@ export default function Trending() {
   const [trending, setTrending] = useState([]);
   const [controlEffect, setControlEffect] = useState(false);
 
-  const { controlTrending, setControlTrending } = useContext(HashtagContext);
+  const { controlTrending, setControlTrending, controlHashtag, setControlHashtag} = useContext(HashtagContext);
 
   function navigateTag(tag) {
-    setControlTrending(!controlTrending);
+    setControlHashtag(!controlHashtag);
     navigate(`/hashtag/${tag.name}`);
   }
 
@@ -28,7 +28,7 @@ export default function Trending() {
       );
       navigate("/");
     });
-  }, [controlEffect]);
+  }, [controlTrending]);
 
   return (
     <Trendings>

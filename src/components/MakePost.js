@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import HashtagContext from "../contexts/HashtagContext";
 import styled from "styled-components";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
@@ -6,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function MakePost({ setControlEffect, controlEffect }) {
   const [disable, setDisable] = useState(false);
   const [buttonCtt, setButtonCtt] = useState("Publish");
+  const { controlTrending, setControlTrending } = useContext(HashtagContext);
 
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -34,7 +36,9 @@ export default function MakePost({ setControlEffect, controlEffect }) {
                 defaultToken,
                 navigate,
                 setControlEffect,
-                controlEffect
+                controlEffect,
+                controlTrending,
+                setControlTrending
               )
             }
           >
@@ -73,7 +77,9 @@ async function handleSubmit(
   defaultToken,
   navigate,
   setControlEffect,
-  controlEffect
+  controlEffect,
+  controlTrending,
+  setControlTrending
 ) {
   let config = {
     headers: {
@@ -94,6 +100,7 @@ async function handleSubmit(
     setDisable(false);
     setButtonCtt("Publish");
     setControlEffect(!controlEffect);
+    setControlTrending(!controlTrending);
   } catch (error) {
     console.log(error);
     alert("Houve um erro ao publicar seu link: " + error.response.data);

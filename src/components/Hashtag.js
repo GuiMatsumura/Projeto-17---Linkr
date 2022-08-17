@@ -18,10 +18,10 @@ export default function Hashtag() {
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
 
-  const { controlTrending, setControlTrending } = useContext(HashtagContext);
+  const { controlHashtag, setControlHashtag } = useContext(HashtagContext);
 
   function navigateTag(tag) {
-    setControlTrending(!controlTrending);
+    setControlHashtag(!controlHashtag);
     navigate(`/hashtag/${tag.replace("#", "")}`);
   }
 
@@ -37,7 +37,7 @@ export default function Hashtag() {
       );
       navigate("/");
     });
-  }, [controlTrending]);
+  }, [controlHashtag]);
 
   useEffect(() => {
     posts.length > 0 ? setHavePost(true) : setHavePost(false);
