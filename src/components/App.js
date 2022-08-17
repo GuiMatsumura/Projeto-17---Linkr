@@ -6,6 +6,7 @@ import Signin from "./signin";
 import Timeline from "./Timeline.js";
 import Signup from "./signup";
 import Hashtag from "./Hashtag.js";
+import UserProfile from "./userProfile/index.jsx";
 
 export default function App() {
   const [token, setToken] = useState("");
@@ -36,6 +37,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/user/:id" element={<UserProfile />} />
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/hashtag/:hashtag" element={<Hashtag />} />
           </Routes>

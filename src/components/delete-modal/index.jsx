@@ -1,19 +1,22 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { ThreeDots } from 'react-loader-spinner';
+import UserContext from "../../contexts/UserContext.js";
 
 import { Background, Box, Text, Buttons } from "./style";
 
-export default function DeleteModal({ setIsModalOpen, id }) {
+export default function DeleteModal({ modalOnOff, id }) {
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
+  /* const token = localStorage.getItem("token"); */
+  const { token } = useContext(UserContext);
+  const defaultToken = token ? token : localStorage.getItem("token");
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${defaultToken}`,
+    },
   };
 
-  console.log(token)
+  /* console.log(id,defaultToken) */
 
   function deletePost(id) {
     const LINK_API = `http://localhost:4000/delete/${id}`;
@@ -22,13 +25,14 @@ export default function DeleteModal({ setIsModalOpen, id }) {
 
     request.then(response => {
       setLoading(false);
-      setIsModalOpen(false);
+      modalOnOff(false);
       window.location.reload()
     });
     request.catch(err => {
       console.log(err.response);
       setLoading(false);
-      alert("E-mail ja cadastrado. Tente novamente.");
+      modalOnOff(false);
+      alert("Não foi possível apagar o post. Tente novamente.");
     });
   }
 
@@ -40,7 +44,7 @@ export default function DeleteModal({ setIsModalOpen, id }) {
             <h1>Are you sure you want<br></br>to delete this post?</h1>
           </Text>
           <Buttons>
-            <button className="noButton">No, go back</button>
+            <button className="noButton" onClick={() => modalOnOff(false)}>No, go back</button>
             <button className="yesButton" onClick={() => deletePost(id)}>
               {loading ? (
                 <ThreeDots color="#FFFFFF" height={13} align='center' />

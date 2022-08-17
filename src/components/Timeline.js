@@ -12,6 +12,7 @@ import Like from "./like";
 import MakePost from "./MakePost";
 import Menu from "./menu/index.jsx";
 import Trending from "./Trendings.js";
+import DeleteModal from "./delete-modal/index.jsx";
 
 export default function Timeline() {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ export default function Timeline() {
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(false);
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
 
@@ -87,6 +90,16 @@ export default function Timeline() {
     setNewDescription("");
   }
 
+  function modalOnOff(){
+    if (isModalOpen) setIsModalOpen(false);
+    if (!isModalOpen) setIsModalOpen(true);
+}
+
+function getIdFromPost(id, state){
+  setIdToDelete(id);
+  modalOnOff(state);
+}
+
   async function handleKey(event, id) {
     if (event.key === "Enter") {
       setInputDisable(!inputDisable);
@@ -114,6 +127,7 @@ export default function Timeline() {
 
   console.log(posts);
   console.log(havePost);
+  if(!isModalOpen){
   return (
     // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
     <AllContent>
@@ -176,7 +190,6 @@ export default function Timeline() {
                       </div>
                     </div>
                   </a>
-                  {/* <h3>{each.url}</h3> */}
                 </div>
                 {each.userId === Number(defaultUserId) ? (
                   <>
@@ -197,6 +210,11 @@ export default function Timeline() {
       )}
     </AllContent>
   );
+}else{
+  return (
+    <DeleteModal modalOnOff={modalOnOff} id={idToDelete}/>
+  )
+}
 }
 
 const AllContent = styled.div`
