@@ -1,39 +1,39 @@
-import styled from 'styled-components';
-import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import HashtagContext from '../contexts/HashtagContext.js';
+import styled from "styled-components";
+import axios from "axios";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import HashtagContext from "../contexts/HashtagContext.js";
 
 export default function Trending() {
   const navigate = useNavigate();
   const [trending, setTrending] = useState([]);
   const [controlEffect, setControlEffect] = useState(false);
 
-  const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
+  const { hashtagClicked, setHashtagClicked, controlTrending, setControlTrending } = useContext(HashtagContext);
 
   function navigateTag(tag) {
+    setControlTrending(!controlTrending);
     setHashtagClicked(tag.name);
-    //setControlEffect(!controlEffect);
     navigate(`/hashtag/${tag.name}`);
   }
 
   useEffect(() => {
-    const promise = axios.get('https://back-linkr-10.herokuapp.com/trending');
+    const promise = axios.get("http://localhost:4000/trending");
 
     promise.then((res) => {
       setTrending(res.data);
     });
     promise.catch(() => {
       alert(
-        'An error occured while trying to fetch the posts, please refresh the page'
+        "An error occured while trying to fetch the posts, please refresh the page"
       );
-      navigate('/');
+      navigate("/");
     });
   }, [controlEffect]);
 
   return (
     <Trendings>
-      <h1>Trending</h1>
+      <h1>trending</h1>
       <div></div>
       <ul>
         {trending.map((each, index) => (
@@ -56,7 +56,7 @@ const Trendings = styled.div`
   border-radius: 16px;
   margin-left: 50px;
   h1 {
-    font-family: 'Oswald';
+    font-family: "Oswald";
     font-style: normal;
     font-weight: 700;
     font-size: 27px;
@@ -69,7 +69,7 @@ const Trendings = styled.div`
     margin-top: 12px;
   }
   li {
-    font-family: 'Lato';
+    font-family: "Lato";
     font-style: normal;
     font-weight: 700;
     font-size: 19px;

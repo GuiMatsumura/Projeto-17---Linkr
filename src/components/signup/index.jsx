@@ -21,7 +21,7 @@ export default function Signup() {
       password,
       photo
     })
-    const LINK_API = "https://back-linkr-10.herokuapp.com/signup";
+    const LINK_API = "http://localhost:4000/signup";
     const request = axios.post(LINK_API, {
       email,
       username,

@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 export default function MakePost() {
   const [disable, setDisable] = useState(false);
   const [buttonCtt, setButtonCtt] = useState("Publish");
@@ -11,6 +12,8 @@ export default function MakePost() {
   const { image, token } = useContext(UserContext);
   const defaultImage = image ? image : localStorage.getItem("image");
   const defaultToken = token ? token : localStorage.getItem("token");
+
+  const navigate = useNavigate();
 
   return (
     <SuperContainer>
@@ -28,7 +31,8 @@ export default function MakePost() {
                 setDescription,
                 url,
                 description,
-                defaultToken
+                defaultToken,
+                navigate
               )
             }
           >
@@ -64,7 +68,8 @@ async function handleSubmit(
   setDescription,
   url,
   description,
-  defaultToken
+  defaultToken,
+  navigate
 ) {
   let config = {
     headers: {
@@ -79,7 +84,7 @@ async function handleSubmit(
     description,
   };
   try {
-    await axios.post("https://back-linkr-10.herokuapp.com/post", body, config);
+    await axios.post("http://localhost:4000/post", body, config);
     setUrl("");
     setDescription("");
     setDisable(false);
@@ -89,6 +94,9 @@ async function handleSubmit(
     alert("Houve um erro ao publicar seu link: " + error.response.data);
     setDisable(false);
     setButtonCtt("Publish");
+    if (error.response.status === 401) {
+      navigate("/");
+    }
   }
 }
 
@@ -162,6 +170,8 @@ const Container = styled.div`
   }
   @media (max-width: 600px) {
     width: 100%;
+    border-radius: 0px;
+
     img {
       display: none;
     }
@@ -173,8 +183,6 @@ const Container = styled.div`
         padding-left: 22px;
       }
     }
-  }
-  @media (min-width: 600px) {
   }
 `;
 

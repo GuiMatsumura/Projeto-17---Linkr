@@ -29,17 +29,13 @@ export default function Timeline() {
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
 
-
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
-
   function navigateTag(tag) {
     setHashtagClicked(tag.replace("#", ""));
-    console.log(hashtagClicked);
     hashtagClicked
       ? navigate(`/hashtag/${hashtagClicked}`)
       : setControlEffect(!controlEffect);
   }
-
 
   function getWindowWidth() {
     const { innerWidth: width } = window;
@@ -56,14 +52,17 @@ export default function Timeline() {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowWidth]);
+  console.log(windowWidth);
+  console.log(display);
 
   const config = {
     headers: {
       Authorization: `Bearer ${defaultToken}`,
     },
   };
+
   useEffect(() => {
-    const promise = axios.get('https://back-linkr-10.herokuapp.com/timeline', config);
+    const promise = axios.get("http://localhost:4000/timeline", config);
 
     promise.then((res) => {
       setPosts(res.data);
@@ -72,9 +71,9 @@ export default function Timeline() {
     });
     promise.catch((err) => {
       alert(
-        'An error occured while trying to fetch the posts, please refresh the page'
+        "An error occured while trying to fetch the posts, please refresh the page"
       );
-      navigate('/');
+      navigate("/");
     });
   }, [controlEffect]);
 
@@ -93,7 +92,7 @@ export default function Timeline() {
       };
       try {
         console.log("tentando");
-        await axios.put("https://back-linkr-10.herokuapp.com/post", body, config);
+        await axios.put("http://localhost:4000/post", body, config);
         setShowInput(false);
         setNewDescription("");
         setInputDisable(false);
@@ -110,15 +109,14 @@ export default function Timeline() {
     }
   }
 
-  console.log(posts);
   return (
     // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <>
+    <AllContent>
       <Menu />
+      <Search display={display} />
       <ScreenName>
         <h2>timeline</h2>
       </ScreenName>
-      <Search display={display} />
 
       <MakePost />
       {/* <Like></Like> */}
@@ -193,9 +191,13 @@ export default function Timeline() {
           <h3>THERE ARE NO POSTS YET</h3>
         </NoPost>
       )}
-    </>
+    </AllContent>
   );
 }
+
+const AllContent = styled.div`
+  background-color: #333333;
+`;
 
 const ScreenName = styled.div`
   height: 10vh;
@@ -208,6 +210,9 @@ const ScreenName = styled.div`
     font-weight: 700;
     font-size: 33px;
     color: #ffffff;
+    font-family: "Oswald";
+    width: 611px;
+    text-align: start;
   }
   @media (min-width: 600px) {
     justify-content: center;
@@ -227,7 +232,7 @@ const Container = styled.div`
     height: 30vh;
     display: flex;
     margin: 20px 0 20px 0;
-    font-family: 'Oswald';
+    font-family: "Oswald";
     font-weight: 700;
     position: relative;
   }
@@ -240,7 +245,7 @@ const Container = styled.div`
       margin-top: 10px;
       color: white;
       font-size: 12px;
-      font-family: 'Lato';
+      font-family: "Lato";
     }
   }
   .avatarImg {
@@ -262,12 +267,12 @@ const Container = styled.div`
       color: #ffffff;
       font-size: 25px;
       margin: 12px 0 0 0;
-      font-family: 'Lato';
+      font-family: "Lato";
     }
     h2 {
       font-size: 20px;
       color: #b7b7b7;
-      font-family: 'Lato';
+      font-family: "Lato";
       margin: 7px 0 0 0;
     }
     .metadata {
@@ -334,7 +339,7 @@ const NoPost = styled.div`
   justify-content: center;
   text-align: center;
   h3 {
-    font-family: 'Lato';
+    font-family: "Lato";
     color: #b7b7b7;
     font-size: 20px;
     margin: 20px 0 0 0;
