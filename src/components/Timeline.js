@@ -17,6 +17,9 @@ import DeleteModal from "./delete-modal/index.jsx";
 export default function Timeline() {
   const navigate = useNavigate();
 
+  const { token, userId } = useContext(UserContext);
+  const defaultToken = token ? token : localStorage.getItem("token");
+  const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
   const [controlEffect, setControlEffect] = useState(false);
@@ -24,21 +27,16 @@ export default function Timeline() {
   const [newDescription, setNewDescription] = useState("");
   const [inputIndex, setInputIndex] = useState();
   const [inputDisable, setInputDisable] = useState(false);
-  const { token, userId } = useContext(UserContext);
-  const defaultToken = token ? token : localStorage.getItem("token");
-  const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
 
-  const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
+  // const {} = useContext(HashtagContext);
 
   function navigateTag(tag) {
-    setHashtagClicked(tag.replace("#", ""));
-    hashtagClicked
-      ? navigate(`/hashtag/${hashtagClicked}`)
-      : setControlEffect(!controlEffect);
+    const hashtag = tag.replace("#", "");
+    navigate(`/hashtag/${hashtag}`);
   }
 
   function getWindowWidth() {
@@ -84,21 +82,22 @@ export default function Timeline() {
   useEffect(() => {
     posts.length > 0 ? setHavePost(true) : setHavePost(false);
   }, [posts]);
+
   function editDescription(index) {
     setShowInput(!showInput);
     setInputIndex(index);
     setNewDescription("");
   }
 
-  function modalOnOff(){
+  function modalOnOff() {
     if (isModalOpen) setIsModalOpen(false);
     if (!isModalOpen) setIsModalOpen(true);
-}
+  }
 
-function getIdFromPost(id, state){
-  setIdToDelete(id);
-  modalOnOff(state);
-}
+  function getIdFromPost(id, state) {
+    setIdToDelete(id);
+    modalOnOff(state);
+  }
 
   async function handleKey(event, id) {
     if (event.key === "Enter") {
@@ -127,94 +126,94 @@ function getIdFromPost(id, state){
 
   console.log(posts);
   console.log(havePost);
-  if(!isModalOpen){
-  return (
-    // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <AllContent>
-      <Menu />
-      <Search display={display} />
-      <ScreenName>
-        <h2>timeline</h2>
-      </ScreenName>
+  if (!isModalOpen) {
+    return (
+      // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <AllContent>
+        <Menu />
+        <Search display={display} />
+        <ScreenName>
+          <h2>timeline</h2>
+        </ScreenName>
 
-      <MakePost
-        setControlEffect={setControlEffect}
-        controlEffect={controlEffect}
-      />
-      {/* <Like></Like> */}
-      {havePost ? (
-        // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
-        <SuperContainer>
-          <Container>
-            {posts.map((each, index) => (
-              <div key={index} className="post">
-                <div className="avatar">
-                  <div className="avatarImg">
-                    <img src={each.foto} />
-                  </div>
-                  <div className="icon">
-                    <IoHeartOutline color="#ffffff" size="22px" />
-                  </div>
-                  <h3>13 likes</h3>
-                </div>
-                <div className="postDescription">
-                  <Link to={`/user/${each.userId}`}>
-                    <h1>{each.name}</h1>
-                  </Link>
-
-                  {showInput && index === inputIndex ? (
-                    <input
-                      autoFocus
-                      value={newDescription ? newDescription : each.description}
-                      onKeyDown={(event) => handleKey(event, each.id)}
-                      onChange={(e) => setNewDescription(e.target.value)}
-                      disabled={inputDisable}
-                    />
-                  ) : (
-                    <ReactTagify
-                      colors={"#ffffff"}
-                      tagClicked={(tag) => navigateTag(tag)}
-                    >
-                      <h2>{each.description}</h2>
-                    </ReactTagify>
-                  )}
-                  <a href={each.url}>
-                    <div className="metadata">
-                      <div className="metadataInfo">
-                        <h2>{each.metadataTitle}</h2>
-                        <h3>{each.metadataDescription}</h3>
-                        <h4>{each.url}</h4>
-                      </div>
-                      <div className="metadataImg">
-                        <img src={each.metadataImg} />
-                      </div>
+        <MakePost
+          setControlEffect={setControlEffect}
+          controlEffect={controlEffect}
+        />
+        {/* <Like></Like> */}
+        {havePost ? (
+          // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
+          <SuperContainer>
+            <Container>
+              {posts.map((each, index) => (
+                <div key={index} className="post">
+                  <div className="avatar">
+                    <div className="avatarImg">
+                      <img src={each.foto} />
                     </div>
-                  </a>
+                    <div className="icon">
+                      <IoHeartOutline color="#ffffff" size="22px" />
+                    </div>
+                    <h3>13 likes</h3>
+                  </div>
+                  <div className="postDescription">
+                    <Link to={`/user/${each.userId}`}>
+                      <h1>{each.name}</h1>
+                    </Link>
+
+                    {showInput && index === inputIndex ? (
+                      <input
+                        autoFocus
+                        value={
+                          newDescription ? newDescription : each.description
+                        }
+                        onKeyDown={(event) => handleKey(event, each.id)}
+                        onChange={(e) => setNewDescription(e.target.value)}
+                        disabled={inputDisable}
+                      />
+                    ) : (
+                      <ReactTagify
+                        colors={"#ffffff"}
+                        tagClicked={(tag) => navigateTag(tag)}
+                      >
+                        <h2>{each.description}</h2>
+                      </ReactTagify>
+                    )}
+                    <a href={each.url}>
+                      <div className="metadata">
+                        <div className="metadataInfo">
+                          <h2>{each.metadataTitle}</h2>
+                          <h3>{each.metadataDescription}</h3>
+                          <h4>{each.url}</h4>
+                        </div>
+                        <div className="metadataImg">
+                          <img src={each.metadataImg} />
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  {each.userId === Number(defaultUserId) ? (
+                    <>
+                      <StyledEdit onClick={() => editDescription(index)} />
+                      <StyledDelete />
+                    </>
+                  ) : null}
                 </div>
-                {each.userId === Number(defaultUserId) ? (
-                  <>
-                    <StyledEdit onClick={() => editDescription(index)} />
-                    <StyledDelete />
-                  </>
-                ) : null}
-              </div>
-            ))}
-          </Container>
-          {/* trendi */}
-          <Trending />
-        </SuperContainer>
-      ) : (
-        <NoPost>
-          <h3>THERE ARE NO POSTS YET</h3>
-        </NoPost>
-      )}
-    </AllContent>
-  );
-}else{
-  return (
-    <DeleteModal modalOnOff={modalOnOff} id={idToDelete}/>
-  )
-}
+              ))}
+            </Container>
+            {/* trendi */}
+            <Trending />
+          </SuperContainer>
+        ) : (
+          <NoPost>
+            <h3>THERE ARE NO POSTS YET</h3>
+          </NoPost>
+        )}
+      </AllContent>
+    );
+  } else {
+    return <DeleteModal modalOnOff={modalOnOff} id={idToDelete} />;
+  }
 }
 
 const AllContent = styled.div`
