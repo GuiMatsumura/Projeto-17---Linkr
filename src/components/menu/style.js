@@ -22,6 +22,9 @@ export const MenuBox = styled.menu`
     letter-spacing: 0.05em;
 
     color: #ffffff;
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 

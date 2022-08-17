@@ -116,6 +116,9 @@ const ScreenName = styled.div`
     font-weight: 700;
     font-size: 33px;
     color: #ffffff;
+    font-family: "Oswald";
+    width: 611px;
+    text-align: start;
   }
   @media (min-width: 600px) {
     justify-content: center;
