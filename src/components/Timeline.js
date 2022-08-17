@@ -30,6 +30,7 @@ export default function Timeline() {
   const [display, setDisplay] = useState("flex");
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
+
   function navigateTag(tag) {
     setHashtagClicked(tag.replace("#", ""));
     hashtagClicked
@@ -67,7 +68,7 @@ export default function Timeline() {
     promise.then((res) => {
       setPosts(res.data);
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
-      havePost ? console.log("ok") : setControlEffect(!controlEffect);
+      // havePost ? console.log("ok") : setControlEffect(!controlEffect);
     });
     promise.catch((err) => {
       alert(
@@ -77,6 +78,9 @@ export default function Timeline() {
     });
   }, [controlEffect]);
 
+  useEffect(() => {
+    posts.length > 0 ? setHavePost(true) : setHavePost(false);
+  }, [posts]);
   function editDescription(index) {
     setShowInput(!showInput);
     setInputIndex(index);
@@ -91,7 +95,6 @@ export default function Timeline() {
         postId: id,
       };
       try {
-        console.log("tentando");
         await axios.put("http://localhost:4000/post", body, config);
         setShowInput(false);
         setNewDescription("");
@@ -109,6 +112,8 @@ export default function Timeline() {
     }
   }
 
+  console.log(posts);
+  console.log(havePost);
   return (
     // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
     <AllContent>
@@ -118,7 +123,10 @@ export default function Timeline() {
         <h2>timeline</h2>
       </ScreenName>
 
-      <MakePost />
+      <MakePost
+        setControlEffect={setControlEffect}
+        controlEffect={controlEffect}
+      />
       {/* <Like></Like> */}
       {havePost ? (
         // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
@@ -143,11 +151,7 @@ export default function Timeline() {
                   {showInput && index === inputIndex ? (
                     <input
                       autoFocus
-                      value={
-                        newDescription
-                          ? newDescription
-                          : setTimeout(() => each.description, 1000)
-                      }
+                      value={newDescription ? newDescription : each.description}
                       onKeyDown={(event) => handleKey(event, each.id)}
                       onChange={(e) => setNewDescription(e.target.value)}
                       disabled={inputDisable}
@@ -197,6 +201,7 @@ export default function Timeline() {
 
 const AllContent = styled.div`
   background-color: #333333;
+  height: 100vh;
 `;
 
 const ScreenName = styled.div`

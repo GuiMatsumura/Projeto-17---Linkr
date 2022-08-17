@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-export default function MakePost() {
+export default function MakePost({ setControlEffect, controlEffect }) {
   const [disable, setDisable] = useState(false);
   const [buttonCtt, setButtonCtt] = useState("Publish");
 
@@ -32,7 +32,9 @@ export default function MakePost() {
                 url,
                 description,
                 defaultToken,
-                navigate
+                navigate,
+                setControlEffect,
+                controlEffect
               )
             }
           >
@@ -69,7 +71,9 @@ async function handleSubmit(
   url,
   description,
   defaultToken,
-  navigate
+  navigate,
+  setControlEffect,
+  controlEffect
 ) {
   let config = {
     headers: {
@@ -89,6 +93,7 @@ async function handleSubmit(
     setDescription("");
     setDisable(false);
     setButtonCtt("Publish");
+    setControlEffect(!controlEffect);
   } catch (error) {
     console.log(error);
     alert("Houve um erro ao publicar seu link: " + error.response.data);

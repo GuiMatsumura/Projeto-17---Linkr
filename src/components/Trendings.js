@@ -9,11 +9,10 @@ export default function Trending() {
   const [trending, setTrending] = useState([]);
   const [controlEffect, setControlEffect] = useState(false);
 
-  const { hashtagClicked, setHashtagClicked, controlTrending, setControlTrending } = useContext(HashtagContext);
+  const { controlTrending, setControlTrending } = useContext(HashtagContext);
 
   function navigateTag(tag) {
     setControlTrending(!controlTrending);
-    setHashtagClicked(tag.name);
     navigate(`/hashtag/${tag.name}`);
   }
 
@@ -83,6 +82,7 @@ const Trendings = styled.div`
     width: auto;
     height: auto;
     padding: 30px 0 30px 16px;
+    text-align: start;
   }
   @media (max-width: 600px) {
     display: none;

@@ -18,26 +18,15 @@ export default function Hashtag() {
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
 
-  const {
-    hashtagClicked,
-    setHashtagClicked,
-    controlTrending,
-    setControlTrending,
-  } = useContext(HashtagContext);
+  const { controlTrending, setControlTrending } = useContext(HashtagContext);
 
- 
-
-  let x = hashtag;
   function navigateTag(tag) {
     setControlTrending(!controlTrending);
-    setHashtagClicked(tag.replace("#", ""));
-    x = tag.replace("#", "");
     navigate(`/hashtag/${tag.replace("#", "")}`);
   }
 
- 
   useEffect(() => {
-    const promise = axios.get(`http://localhost:4000/hashtag/${x}`);
+    const promise = axios.get(`http://localhost:4000/hashtag/${hashtag}`);
 
     promise.then((res) => {
       setPosts(res.data);
@@ -55,7 +44,7 @@ export default function Hashtag() {
   }, [posts]);
 
   return (
-    <>
+    <AllContent>
       <Menu />
       <ScreenName>
         <h2># {hashtag}</h2>
@@ -94,12 +83,16 @@ export default function Hashtag() {
       ) : (
         <NoPost>
           <h3>THERE ARE NO POSTS YET</h3>
+          <Trending />
         </NoPost>
       )}
-    </>
+    </AllContent>
   );
 }
-
+const AllContent = styled.div`
+  background-color: #333333;
+  height: 100vh;
+`;
 const ScreenName = styled.div`
   height: 10vh;
   width: 100vw;
@@ -197,6 +190,7 @@ const NoPost = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
+  position: relative;
   h3 {
     font-family: "Lato";
     color: #b7b7b7;
