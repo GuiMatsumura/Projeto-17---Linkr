@@ -16,7 +16,7 @@ export default function DeleteModal({ modalOnOff, id }) {
     },
   };
 
-  console.log(id,defaultToken)
+  /* console.log(id,defaultToken) */
 
   function deletePost(id) {
     const LINK_API = `https://back-linkr-10.herokuapp.com/delete/${id}`;
@@ -31,6 +31,7 @@ export default function DeleteModal({ modalOnOff, id }) {
     request.catch(err => {
       console.log(err.response);
       setLoading(false);
+      modalOnOff(false);
       alert("Não foi possível apagar o post. Tente novamente.");
     });
   }
