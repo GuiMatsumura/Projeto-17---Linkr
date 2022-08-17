@@ -12,6 +12,7 @@ import Like from "./like";
 import MakePost from "./MakePost";
 import Menu from "./menu/index.jsx";
 import Trending from "./Trendings.js";
+import DeleteModal from "./delete-modal/index.jsx";
 
 export default function Timeline() {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ export default function Timeline() {
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(false);
 
 
   const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
@@ -84,6 +87,16 @@ export default function Timeline() {
     setNewDescription("");
   }
 
+  function modalOnOff(){
+    if (isModalOpen) setIsModalOpen(false);
+    if (!isModalOpen) setIsModalOpen(true);
+}
+
+function getIdFromPost(id, state){
+  setIdToDelete(id);
+  modalOnOff(state);
+}
+
   async function handleKey(event, id) {
     if (event.key === "Enter") {
       setInputDisable(!inputDisable);
@@ -111,90 +124,97 @@ export default function Timeline() {
   }
 
   console.log(posts);
-  return (
-    // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <>
-      <Menu />
-      <ScreenName>
-        <h2>timeline</h2>
-      </ScreenName>
-      <Search display={display} />
-
-      <MakePost />
-      {/* <Like></Like> */}
-      {havePost ? (
-        // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
-        <SuperContainer>
-          <Container>
-            {posts.map((each, index) => (
-              <div key={index} className="post">
-                <div className="avatar">
-                  <div className="avatarImg">
-                    <img src={each.foto} />
-                  </div>
-                  <div className="icon">
-                    <IoHeartOutline color="#ffffff" size="22px" />
-                  </div>
-                  <h3>13 likes</h3>
-                </div>
-                <div className="postDescription">
-                  <Link to={`/user/${each.userId}`}>
-                    <h1>{each.name}</h1>
-                  </Link>
-
-                  {showInput && index === inputIndex ? (
-                    <input
-                      autoFocus
-                      value={
-                        newDescription
-                          ? newDescription
-                          : setTimeout(() => each.description, 1000)
-                      }
-                      onKeyDown={(event) => handleKey(event, each.id)}
-                      onChange={(e) => setNewDescription(e.target.value)}
-                      disabled={inputDisable}
-                    />
-                  ) : (
-                    <ReactTagify
-                      colors={"#ffffff"}
-                      tagClicked={(tag) => navigateTag(tag)}
-                    >
-                      <h2>{each.description}</h2>
-                    </ReactTagify>
-                  )}
-                  <a href={each.url}>
-                    <div className="metadata">
-                      <div className="metadataInfo">
-                        <h2>{each.metadataTitle}</h2>
-                        <h3>{each.metadataDescription}</h3>
-                        <h4>{each.url}</h4>
-                      </div>
-                      <div className="metadataImg">
-                        <img src={each.metadataImg} />
-                      </div>
+  if(!isModalOpen){
+    return (
+      // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <>
+      {/* <button onClick={() => getIdFromPost(1, true)}>modal</button> */}
+        <Menu />
+        <ScreenName>
+          <h2>timeline</h2>
+        </ScreenName>
+        <Search display={display} />
+  
+        <MakePost />
+        {/* <Like></Like> */}
+        {havePost ? (
+          // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
+          <SuperContainer>
+            <Container>
+              {posts.map((each, index) => (
+                <div key={index} className="post">
+                  <div className="avatar">
+                    <div className="avatarImg">
+                      <img src={each.foto} />
                     </div>
-                  </a>
-                  {/* <h3>{each.url}</h3> */}
+                    <div className="icon">
+                      <IoHeartOutline color="#ffffff" size="22px" />
+                    </div>
+                    <h3>13 likes</h3>
+                  </div>
+                  <div className="postDescription">
+                    <Link to={`/user/${each.userId}`}>
+                      <h1>{each.name}</h1>
+                    </Link>
+  
+                    {showInput && index === inputIndex ? (
+                      <input
+                        autoFocus
+                        value={
+                          newDescription
+                            ? newDescription
+                            : setTimeout(() => each.description, 1000)
+                        }
+                        onKeyDown={(event) => handleKey(event, each.id)}
+                        onChange={(e) => setNewDescription(e.target.value)}
+                        disabled={inputDisable}
+                      />
+                    ) : (
+                      <ReactTagify
+                        colors={"#ffffff"}
+                        tagClicked={(tag) => navigateTag(tag)}
+                      >
+                        <h2>{each.description}</h2>
+                      </ReactTagify>
+                    )}
+                    <a href={each.url}>
+                      <div className="metadata">
+                        <div className="metadataInfo">
+                          <h2>{each.metadataTitle}</h2>
+                          <h3>{each.metadataDescription}</h3>
+                          <h4>{each.url}</h4>
+                        </div>
+                        <div className="metadataImg">
+                          <img src={each.metadataImg} />
+                        </div>
+                      </div>
+                    </a>
+                    {/* <h3>{each.url}</h3> */}
+                  </div>
+                  {each.userId === Number(defaultUserId) ? (
+                    <>
+                      <StyledEdit onClick={() => editDescription(index)} />
+                      <StyledDelete onClick={() => getIdFromPost(each.id, true)}/>
+                    </>
+                  ) : null}
                 </div>
-                {each.userId === Number(defaultUserId) ? (
-                  <>
-                    <StyledEdit onClick={() => editDescription(index)} />
-                    <StyledDelete />
-                  </>
-                ) : null}
-              </div>
-            ))}
-          </Container>
-          {/* trendi */}
-          <Trending />
-        </SuperContainer>
-      ) : (
-        <NoPost>
-          <h3>THERE ARE NO POSTS YET</h3>
-        </NoPost>
-      )}
-    </>
-  );
+              ))}
+            </Container>
+            {/* trendi */}
+            <Trending />
+          </SuperContainer>
+        ) : (
+          <NoPost>
+            <h3>THERE ARE NO POSTS YET</h3>
+          </NoPost>
+        )}
+      </>
+    );
+  }else{
+    return (
+      <DeleteModal modalOnOff={modalOnOff} id={idToDelete}/>
+    )
+  }
 }
 
 const ScreenName = styled.div`
