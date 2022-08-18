@@ -5,6 +5,7 @@ import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
+import { AiOutlineComment } from "react-icons/ai";
 import { ReactTagify } from "react-tagify";
 import HashtagContext from "../contexts/HashtagContext.js";
 import Search from "./Search.js";
@@ -155,6 +156,10 @@ export default function Timeline() {
                       <IoHeartOutline color="#ffffff" size="22px" />
                     </div>
                     <h3>13 likes</h3>
+                    <div className="comment">
+                      <AiOutlineComment />
+                      <h3>3 comments</h3>
+                    </div>
                   </div>
                   <div className="postDescription">
                     <Link to={`/user/${each.userId}`}>
@@ -249,9 +254,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   .post {
+    width: 611px;
+    height: 276px;
     background-color: #171717;
-    width: 100vw;
-    height: 30vh;
+    border-radius: 16px;
     display: flex;
     margin: 20px 0 20px 0;
     font-family: "Oswald";
@@ -283,6 +289,17 @@ const Container = styled.div`
     width: 20px;
     margin: 15px 0 0 0;
   }
+  .comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    color: #ffffff;
+    font-size: 24px;
+    h3 {
+      font-size: 11px;
+    }
+  }
   .postDescription {
     width: 75%;
     h1 {
@@ -298,18 +315,24 @@ const Container = styled.div`
       margin: 7px 0 0 0;
     }
     .metadata {
+      height: 155px;
+
       display: flex;
       align-items: center;
       margin: 10px 0 0 0;
       width: 100%;
-      height: 100px;
       background-color: #171717;
       border: 1px solid #4d4d4d;
       border-radius: 11px;
       .metadataInfo {
+        height: 130px;
         width: 80%;
-        height: 80px;
         margin: 0 0 0 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         h2 {
           font-family: "Lato";
           font-size: 16px;
@@ -319,28 +342,31 @@ const Container = styled.div`
           font-family: "Lato";
           font-size: 11px;
           color: #9b9595;
-          margin: 4px 0 0 0;
+          margin: 4px 0;
+          overflow: hidden;
         }
         h4 {
           font-family: "Lato";
           font-size: 11px;
           color: #cecece;
-          margin: 4px 0 0 0;
+          margin: 4px 0;
+          overflow: hidden;
         }
       }
       .metadataImg {
         img {
-          width: 100px;
-          height: 100px;
+          width: 154px;
+          height: 155px;
+
           border-radius: 0px 12px 13px 0px;
         }
       }
     }
   }
-  @media (min-width: 600px) {
+  @media (max-width: 600px) {
     .post {
-      width: 611px;
-      height: 276px;
+      width: 100vw;
+      height: 270px;
       border-radius: 16px;
     }
     .avatarImg {
@@ -349,6 +375,18 @@ const Container = styled.div`
     .postDescription {
       h1 {
         margin: 23px 0 0 0;
+      }
+      .metadata {
+        height: 115px;
+        .metadataInfo {
+          height: 110px;
+        }
+        .metadataImg {
+          img {
+            width: 95px;
+            height: 115px;
+          }
+        }
       }
     }
   }

@@ -186,14 +186,16 @@ const Container = styled.div`
     align-items: center;
     margin: 10px 0 0 0;
     width: 100%;
-    height: 100px;
+    height: 155px;
     background-color: #171717;
     border: 1px solid #4d4d4d;
     border-radius: 11px;
     .metadataInfo {
       width: 80%;
-      height: 80px;
+      height: 130px;
       margin: 0 0 0 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       h2 {
         font-family: "Lato";
         font-size: 16px;
@@ -214,8 +216,8 @@ const Container = styled.div`
     }
     .metadataImg {
       img {
-        width: 100px;
-        height: 100px;
+        width: 154px;
+        height: 155px;
         border-radius: 0px 12px 13px 0px;
       }
     }
