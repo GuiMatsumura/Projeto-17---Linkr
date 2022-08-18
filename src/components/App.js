@@ -12,6 +12,8 @@ export default function App() {
   const [token, setToken] = useState("");
   const [image, setImage] = useState("");
   const [userId, setUserId] = useState();
+  const [username, setUsername] = useState("")
+  const [hashtagClicked, setHashtagClicked] = useState("");
   const [controlTrending, setControlTrending] = useState(false);
   const [controlHashtag, setControlHashtag] = useState(false);
 
@@ -32,6 +34,8 @@ export default function App() {
           setImage,
           userId,
           setUserId,
+          username,
+          setUsername
         }}
       >
         <BrowserRouter>
