@@ -41,7 +41,7 @@ export default function Search({ display }) {
 
 async function getUsers() {
   try {
-    const response = await axios.get("https://back-linkr-10.herokuapp.com/users");
+    const response = await axios.get("http://localhost:4000/users");
     return response.data;
   } catch (error) {
     console.log(error);
@@ -66,7 +66,6 @@ function List({ person }) {
     </Link>
   );
 }
-
 
 const Container = styled.div`
   display: ${(props) => props.display};
@@ -97,6 +96,11 @@ const Container = styled.div`
     justify-content: space-around;
     width: 100%;
     padding: 0 15px;
+  }
+
+  @media (max-width: 600px) {
+    width: 90%;
+    margin: 5%;
   }
 `;
 

@@ -12,10 +12,18 @@ export default function App() {
   const [token, setToken] = useState("");
   const [image, setImage] = useState("");
   const [userId, setUserId] = useState();
-  const [hashtagClicked, setHashtagClicked] = useState("");
+  const [controlTrending, setControlTrending] = useState(false);
+  const [controlHashtag, setControlHashtag] = useState(false);
 
   return (
-    <HashtagContext.Provider value={{ hashtagClicked, setHashtagClicked }}>
+    <HashtagContext.Provider
+      value={{
+        controlTrending,
+        setControlTrending,
+        controlHashtag,
+        setControlHashtag,
+      }}
+    >
       <UserContext.Provider
         value={{
           token,

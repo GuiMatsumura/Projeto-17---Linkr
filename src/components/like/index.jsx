@@ -74,7 +74,7 @@ export default function Like({ statusLike, postId }) {
     function getLikes() {
 
         const body = { like: clickedLike, postId }
-        const URL = "https://back-linkr-10.herokuapp.com/like-post"
+        const URL = "http://localhost:4000/like-post"
         const config = { headers: { Authorization: 'Bearer ' + defaultToken } }
 
         const request = axios.post(URL, body, config);
@@ -88,7 +88,7 @@ export default function Like({ statusLike, postId }) {
     function submitLike() {
 
         const body = { like: clickedLike, postId }
-        const URL = "https://back-linkr-10.herokuapp.com/likes"
+        const URL = "http://localhost:4000/likes"
         const config = { headers: { Authorization: 'Bearer ' + defaultToken } }
 
         const request = axios.post(URL, body, config);

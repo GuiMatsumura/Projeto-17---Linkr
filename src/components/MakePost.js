@@ -1,16 +1,21 @@
 import { useState, useContext } from "react";
+import HashtagContext from "../contexts/HashtagContext";
 import styled from "styled-components";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
-export default function MakePost() {
+import { useNavigate } from "react-router-dom";
+export default function MakePost({ setControlEffect, controlEffect }) {
   const [disable, setDisable] = useState(false);
   const [buttonCtt, setButtonCtt] = useState("Publish");
+  const { controlTrending, setControlTrending } = useContext(HashtagContext);
 
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const { image, token } = useContext(UserContext);
   const defaultImage = image ? image : localStorage.getItem("image");
   const defaultToken = token ? token : localStorage.getItem("token");
+
+  const navigate = useNavigate();
 
   return (
     <SuperContainer>
@@ -28,7 +33,12 @@ export default function MakePost() {
                 setDescription,
                 url,
                 description,
-                defaultToken
+                defaultToken,
+                navigate,
+                setControlEffect,
+                controlEffect,
+                controlTrending,
+                setControlTrending
               )
             }
           >
@@ -64,7 +74,12 @@ async function handleSubmit(
   setDescription,
   url,
   description,
-  defaultToken
+  defaultToken,
+  navigate,
+  setControlEffect,
+  controlEffect,
+  controlTrending,
+  setControlTrending
 ) {
   let config = {
     headers: {
@@ -79,16 +94,21 @@ async function handleSubmit(
     description,
   };
   try {
-    await axios.post("https://back-linkr-10.herokuapp.com/post", body, config);
+    await axios.post("http://localhost:4000/post", body, config);
     setUrl("");
     setDescription("");
     setDisable(false);
     setButtonCtt("Publish");
+    setControlEffect(!controlEffect);
+    setControlTrending(!controlTrending);
   } catch (error) {
     console.log(error);
     alert("Houve um erro ao publicar seu link: " + error.response.data);
     setDisable(false);
     setButtonCtt("Publish");
+    if (error.response.status === 401) {
+      navigate("/");
+    }
   }
 }
 
@@ -162,6 +182,8 @@ const Container = styled.div`
   }
   @media (max-width: 600px) {
     width: 100%;
+    border-radius: 0px;
+
     img {
       display: none;
     }
@@ -173,8 +195,6 @@ const Container = styled.div`
         padding-left: 22px;
       }
     }
-  }
-  @media (min-width: 600px) {
   }
 `;
 

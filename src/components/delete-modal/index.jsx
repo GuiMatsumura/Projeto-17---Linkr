@@ -19,7 +19,7 @@ export default function DeleteModal({ modalOnOff, id }) {
   /* console.log(id,defaultToken) */
 
   function deletePost(id) {
-    const LINK_API = `https://back-linkr-10.herokuapp.com/delete/${id}`;
+    const LINK_API = `http://localhost:4000/delete/${id}`;
     const request = axios.delete(LINK_API, config);
     setLoading(true);
 
