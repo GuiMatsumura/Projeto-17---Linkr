@@ -14,9 +14,18 @@ export default function App() {
   const [userId, setUserId] = useState();
   const [username, setUsername] = useState("")
   const [hashtagClicked, setHashtagClicked] = useState("");
+  const [controlTrending, setControlTrending] = useState(false);
+  const [controlHashtag, setControlHashtag] = useState(false);
 
   return (
-    <HashtagContext.Provider value={{ hashtagClicked, setHashtagClicked }}>
+    <HashtagContext.Provider
+      value={{
+        controlTrending,
+        setControlTrending,
+        controlHashtag,
+        setControlHashtag,
+      }}
+    >
       <UserContext.Provider
         value={{
           token,

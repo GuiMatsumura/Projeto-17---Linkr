@@ -67,13 +67,12 @@ export default function Like({ postId }) {
     function getLikes() {
 
         const URL = `https://back-linkr-10.herokuapp.com/likes/many/${postId}`;
-
         const request = axios.get(URL);
 
         request.then((response) => {
             setUsernameLikePost(response.data);
-            console.log(response.data);
         })
+        
         request.catch(() => alert("Post Id não encontrado"));
 
     }

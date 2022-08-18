@@ -17,6 +17,9 @@ import DeleteModal from "./delete-modal/index.jsx";
 export default function Timeline() {
   const navigate = useNavigate();
 
+  const { token, userId } = useContext(UserContext);
+  const defaultToken = token ? token : localStorage.getItem("token");
+  const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
   const [controlEffect, setControlEffect] = useState(false);
@@ -24,25 +27,17 @@ export default function Timeline() {
   const [newDescription, setNewDescription] = useState("");
   const [inputIndex, setInputIndex] = useState();
   const [inputDisable, setInputDisable] = useState(false);
-  const { token, userId } = useContext(UserContext);
-  const defaultToken = token ? token : localStorage.getItem("token");
-  const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
 
-
-  const { hashtagClicked, setHashtagClicked } = useContext(HashtagContext);
+  // const {} = useContext(HashtagContext);
 
   function navigateTag(tag) {
-    setHashtagClicked(tag.replace("#", ""));
-    console.log(hashtagClicked);
-    hashtagClicked
-      ? navigate(`/hashtag/${hashtagClicked}`)
-      : setControlEffect(!controlEffect);
+    const hashtag = tag.replace("#", "");
+    navigate(`/hashtag/${hashtag}`);
   }
-
 
   function getWindowWidth() {
     const { innerWidth: width } = window;
@@ -59,27 +54,34 @@ export default function Timeline() {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowWidth]);
+  console.log(windowWidth);
+  console.log(display);
 
   const config = {
     headers: {
       Authorization: `Bearer ${defaultToken}`,
     },
   };
+
   useEffect(() => {
-    const promise = axios.get('https://back-linkr-10.herokuapp.com/timeline', config);
+    const promise = axios.get("http://localhost:4000/timeline", config);
 
     promise.then((res) => {
       setPosts(res.data);
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
-      havePost ? console.log("ok") : setControlEffect(!controlEffect);
+      // havePost ? console.log("ok") : setControlEffect(!controlEffect);
     });
     promise.catch((err) => {
       alert(
-        'An error occured while trying to fetch the posts, please refresh the page'
+        "An error occured while trying to fetch the posts, please refresh the page"
       );
-      navigate('/');
+      navigate("/");
     });
   }, [controlEffect]);
+
+  useEffect(() => {
+    posts.length > 0 ? setHavePost(true) : setHavePost(false);
+  }, [posts]);
 
   function editDescription(index) {
     setShowInput(!showInput);
@@ -87,15 +89,15 @@ export default function Timeline() {
     setNewDescription("");
   }
 
-  function modalOnOff(){
+  function modalOnOff() {
     if (isModalOpen) setIsModalOpen(false);
     if (!isModalOpen) setIsModalOpen(true);
-}
+  }
 
-function getIdFromPost(id, state){
-  setIdToDelete(id);
-  modalOnOff(state);
-}
+  function getIdFromPost(id, state) {
+    setIdToDelete(id);
+    modalOnOff(state);
+  }
 
   async function handleKey(event, id) {
     if (event.key === "Enter") {
@@ -105,8 +107,7 @@ function getIdFromPost(id, state){
         postId: id,
       };
       try {
-        console.log("tentando");
-        await axios.put("https://back-linkr-10.herokuapp.com/post", body, config);
+        await axios.put("http://localhost:4000/post", body, config);
         setShowInput(false);
         setNewDescription("");
         setInputDisable(false);
@@ -124,19 +125,22 @@ function getIdFromPost(id, state){
   }
 
   console.log(posts);
-  
-  if(!isModalOpen){
+
+  console.log(havePost);
+  if (!isModalOpen) {
     return (
       // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <>
-      {/* <button onClick={() => getIdFromPost(1, true)}>modal</button> */}
+      <AllContent>
         <Menu />
+        <Search display={display} />
         <ScreenName>
           <h2>timeline</h2>
         </ScreenName>
-        <Search display={display} />
-  
-        <MakePost />
+
+        <MakePost
+          setControlEffect={setControlEffect}
+          controlEffect={controlEffect}
+        />
         {/* <Like></Like> */}
         {havePost ? (
           // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
@@ -156,14 +160,12 @@ function getIdFromPost(id, state){
                     <Link to={`/user/${each.userId}`}>
                       <h1>{each.name}</h1>
                     </Link>
-  
+
                     {showInput && index === inputIndex ? (
                       <input
                         autoFocus
                         value={
-                          newDescription
-                            ? newDescription
-                            : setTimeout(() => each.description, 1000)
+                          newDescription ? newDescription : each.description
                         }
                         onKeyDown={(event) => handleKey(event, each.id)}
                         onChange={(e) => setNewDescription(e.target.value)}
@@ -189,12 +191,11 @@ function getIdFromPost(id, state){
                         </div>
                       </div>
                     </a>
-                    {/* <h3>{each.url}</h3> */}
                   </div>
                   {each.userId === Number(defaultUserId) ? (
                     <>
                       <StyledEdit onClick={() => editDescription(index)} />
-                      <StyledDelete onClick={() => getIdFromPost(each.id, true)}/>
+                      <StyledDelete />
                     </>
                   ) : null}
                 </div>
@@ -208,14 +209,17 @@ function getIdFromPost(id, state){
             <h3>THERE ARE NO POSTS YET</h3>
           </NoPost>
         )}
-      </>
+      </AllContent>
     );
-  }else{
-    return (
-      <DeleteModal modalOnOff={modalOnOff} id={idToDelete}/>
-    )
+  } else {
+    return <DeleteModal modalOnOff={modalOnOff} id={idToDelete} />;
   }
 }
+
+const AllContent = styled.div`
+  background-color: #333333;
+  height: 100vh;
+`;
 
 const ScreenName = styled.div`
   height: 10vh;
@@ -228,6 +232,9 @@ const ScreenName = styled.div`
     font-weight: 700;
     font-size: 33px;
     color: #ffffff;
+    font-family: "Oswald";
+    width: 611px;
+    text-align: start;
   }
   @media (min-width: 600px) {
     justify-content: center;
@@ -247,7 +254,7 @@ const Container = styled.div`
     height: 30vh;
     display: flex;
     margin: 20px 0 20px 0;
-    font-family: 'Oswald';
+    font-family: "Oswald";
     font-weight: 700;
     position: relative;
   }
@@ -256,7 +263,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    
   }
   .avatarImg {
     margin: 10px 0 0 0;
@@ -280,12 +286,12 @@ const Container = styled.div`
       color: #ffffff;
       font-size: 25px;
       margin: 12px 0 0 0;
-      font-family: 'Lato';
+      font-family: "Lato";
     }
     h2 {
       font-size: 20px;
       color: #b7b7b7;
-      font-family: 'Lato';
+      font-family: "Lato";
       margin: 7px 0 0 0;
     }
     .metadata {
@@ -352,7 +358,7 @@ const NoPost = styled.div`
   justify-content: center;
   text-align: center;
   h3 {
-    font-family: 'Lato';
+    font-family: "Lato";
     color: #b7b7b7;
     font-size: 20px;
     margin: 20px 0 0 0;

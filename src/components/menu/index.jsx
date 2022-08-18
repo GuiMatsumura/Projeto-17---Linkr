@@ -4,6 +4,7 @@ import { PopUpMenu } from "./popupmenu";
 import { useContext, useState, useEffect } from "react";
 import Search from "../Search.js";
 import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Menu() {
   const [clicked, setClicked] = useState(false);
@@ -11,7 +12,7 @@ export default function Menu() {
   const [display, setDisplay] = useState("flex");
   const defaultImage = image ? image : localStorage.getItem("image");
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
-
+  const navigate = useNavigate();
   function getWindowWidth() {
     const { innerWidth: width } = window;
     return width;
@@ -43,10 +44,13 @@ export default function Menu() {
       />
     );
   }
+  function goingTimeline() {
+    navigate("/timeline");
+  }
 
   return (
     <MenuBox>
-      <span>linkr</span>
+      <span onClick={goingTimeline}>linkr</span>
       <Search display={display} />
       <ProfileMenu>
         <div className="icon">{makeIcon()}</div>
