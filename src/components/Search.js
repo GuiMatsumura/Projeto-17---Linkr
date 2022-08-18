@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import { Link } from "react-router-dom";
+
 export default function Search({ display }) {
   const [searchField, setSearchField] = useState("");
   const [filteredPersons, setFilteredPersons] = useState([]);

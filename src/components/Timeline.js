@@ -133,9 +133,9 @@ export default function Timeline() {
                     <img src={each.foto} />
                   </div>
                   <div className="icon">
-                    <IoHeartOutline color="#ffffff" size="22px" />
+                    <Like postId={each.id} />
                   </div>
-                  <h3>13 likes</h3>
+
                 </div>
                 <div className="postDescription">
                   <Link to={`/user/${each.userId}`}>
@@ -236,12 +236,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    h3 {
-      margin-top: 10px;
-      color: white;
-      font-size: 12px;
-      font-family: 'Lato';
-    }
+    
   }
   .avatarImg {
     margin: 10px 0 0 0;
@@ -252,9 +247,12 @@ const Container = styled.div`
     }
   }
   .icon {
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 100%;
     margin: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .postDescription {
     width: 75%;

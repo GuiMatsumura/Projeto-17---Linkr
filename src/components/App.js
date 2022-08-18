@@ -11,6 +11,7 @@ export default function App() {
   const [token, setToken] = useState("");
   const [image, setImage] = useState("");
   const [userId, setUserId] = useState();
+  const [username, setUsername] = useState("")
   const [hashtagClicked, setHashtagClicked] = useState("");
 
   return (
@@ -23,6 +24,8 @@ export default function App() {
           setImage,
           userId,
           setUserId,
+          username,
+          setUsername
         }}
       >
         <BrowserRouter>
