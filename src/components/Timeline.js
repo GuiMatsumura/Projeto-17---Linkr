@@ -31,6 +31,7 @@ export default function Timeline() {
   const [showInput, setShowInput] = useState(false);
   const [newDescription, setNewDescription] = useState("");
   const [inputIndex, setInputIndex] = useState();
+  const [commentIndex, setCommentIndex] = useState();
   const [inputDisable, setInputDisable] = useState(false);
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
@@ -89,6 +90,11 @@ export default function Timeline() {
     setShowInput(!showInput);
     setInputIndex(index);
     setNewDescription("");
+  }
+
+  function showComments(index) {
+    setClickComment(!clickComment);
+    setCommentIndex(index);
   }
 
   function modalOnOff() {
@@ -157,9 +163,7 @@ export default function Timeline() {
                       </div>
                       <h3>13 likes</h3>
                       <div className="comment">
-                        <AiOutlineComment
-                          onClick={() => setClickComment(!clickComment)}
-                        />
+                        <AiOutlineComment onClick={() => showComments(index)} />
                         <h3>3 comments</h3>
                       </div>
                     </div>
@@ -206,7 +210,15 @@ export default function Timeline() {
                       </>
                     ) : null}
                   </div>
-                  {clickComment ? <Comments image={defaultImage} /> : null}
+                  {clickComment && index === commentIndex ? (
+                    <Comments
+                      image={defaultImage}
+                      userId={defaultUserId}
+                      token={defaultToken}
+                      postId={each.id}
+
+                    />
+                  ) : null}
                 </FullPost>
               ))}
             </Container>
@@ -266,7 +278,7 @@ const Container = styled.div`
     background-color: #171717;
     border-radius: 16px;
     display: flex;
-    margin: 20px 0 20px 0;
+    margin-top: 40px;
     font-family: "Oswald";
     font-weight: 700;
     position: relative;

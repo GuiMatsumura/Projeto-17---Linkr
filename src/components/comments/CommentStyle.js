@@ -43,11 +43,15 @@ export const InputBox = styled.div`
     width: 100%;
     height: 100%;
     border: none;
+    color: #ffffff;
     &::placeholder {
       color: #575757;
       font-family: "Lato";
       font-style: italic;
       font-size: 14px;
+    }
+    &:focus {
+      outline: none;
     }
   }
 `;
