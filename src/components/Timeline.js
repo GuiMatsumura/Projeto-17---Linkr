@@ -14,12 +14,16 @@ import MakePost from "./MakePost";
 import Menu from "./menu/index.jsx";
 import Trending from "./Trendings.js";
 import DeleteModal from "./delete-modal/index.jsx";
+import Comments from "./comments/Comments.jsx";
+import CommentContext from "../contexts/CommentContext.js";
 
 export default function Timeline() {
   const navigate = useNavigate();
 
-  const { token, userId } = useContext(UserContext);
+  const { token, userId, image } = useContext(UserContext);
+  const { clickComment, setClickComment } = useContext(CommentContext);
   const defaultToken = token ? token : localStorage.getItem("token");
+  const defaultImage = image ? image : localStorage.getItem("image");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
@@ -32,9 +36,7 @@ export default function Timeline() {
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
-
-  // const {} = useContext(HashtagContext);
-
+  console.log(clickComment);
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
@@ -70,7 +72,6 @@ export default function Timeline() {
     promise.then((res) => {
       setPosts(res.data);
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
-      // havePost ? console.log("ok") : setControlEffect(!controlEffect);
     });
     promise.catch((err) => {
       alert(
@@ -129,7 +130,6 @@ export default function Timeline() {
   console.log(havePost);
   if (!isModalOpen) {
     return (
-      // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
       <AllContent>
         <Menu />
         <Search display={display} />
@@ -143,67 +143,71 @@ export default function Timeline() {
         />
         {/* <Like></Like> */}
         {havePost ? (
-          // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
           <SuperContainer>
             <Container>
               {posts.map((each, index) => (
-                <div key={index} className="post">
-                  <div className="avatar">
-                    <div className="avatarImg">
-                      <img src={each.foto} />
-                    </div>
-                    <div className="icon">
-                      <IoHeartOutline color="#ffffff" size="22px" />
-                    </div>
-                    <h3>13 likes</h3>
-                    <div className="comment">
-                      <AiOutlineComment />
-                      <h3>3 comments</h3>
-                    </div>
-                  </div>
-                  <div className="postDescription">
-                    <Link to={`/user/${each.userId}`}>
-                      <h1>{each.name}</h1>
-                    </Link>
-
-                    {showInput && index === inputIndex ? (
-                      <input
-                        autoFocus
-                        value={
-                          newDescription ? newDescription : each.description
-                        }
-                        onKeyDown={(event) => handleKey(event, each.id)}
-                        onChange={(e) => setNewDescription(e.target.value)}
-                        disabled={inputDisable}
-                      />
-                    ) : (
-                      <ReactTagify
-                        colors={"#ffffff"}
-                        tagClicked={(tag) => navigateTag(tag)}
-                      >
-                        <h2>{each.description}</h2>
-                      </ReactTagify>
-                    )}
-                    <a href={each.url}>
-                      <div className="metadata">
-                        <div className="metadataInfo">
-                          <h2>{each.metadataTitle}</h2>
-                          <h3>{each.metadataDescription}</h3>
-                          <h4>{each.url}</h4>
-                        </div>
-                        <div className="metadataImg">
-                          <img src={each.metadataImg} />
-                        </div>
+                <FullPost key={index}>
+                  <div className="post">
+                    <div className="avatar">
+                      <div className="avatarImg">
+                        <img src={each.foto} />
                       </div>
-                    </a>
+                      <div className="icon">
+                        <IoHeartOutline color="#ffffff" size="22px" />
+                      </div>
+                      <h3>13 likes</h3>
+                      <div className="comment">
+                        <AiOutlineComment
+                          onClick={() => setClickComment(!clickComment)}
+                        />
+                        <h3>3 comments</h3>
+                      </div>
+                    </div>
+                    <div className="postDescription">
+                      <Link to={`/user/${each.userId}`}>
+                        <h1>{each.name}</h1>
+                      </Link>
+
+                      {showInput && index === inputIndex ? (
+                        <input
+                          autoFocus
+                          value={
+                            newDescription ? newDescription : each.description
+                          }
+                          onKeyDown={(event) => handleKey(event, each.id)}
+                          onChange={(e) => setNewDescription(e.target.value)}
+                          disabled={inputDisable}
+                        />
+                      ) : (
+                        <ReactTagify
+                          colors={"#ffffff"}
+                          tagClicked={(tag) => navigateTag(tag)}
+                        >
+                          <h2>{each.description}</h2>
+                        </ReactTagify>
+                      )}
+                      <a href={each.url}>
+                        <div className="metadata">
+                          <div className="metadataInfo">
+                            <h2>{each.metadataTitle}</h2>
+                            <h3>{each.metadataDescription}</h3>
+                            <h4>{each.url}</h4>
+                          </div>
+                          <div className="metadataImg">
+                            <img src={each.metadataImg} />
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {each.userId === Number(defaultUserId) ? (
+                      <>
+                        <StyledEdit onClick={() => editDescription(index)} />
+                        <StyledDelete />
+                      </>
+                    ) : null}
                   </div>
-                  {each.userId === Number(defaultUserId) ? (
-                    <>
-                      <StyledEdit onClick={() => editDescription(index)} />
-                      <StyledDelete />
-                    </>
-                  ) : null}
-                </div>
+                  {clickComment ? <Comments image={defaultImage} /> : null}
+                </FullPost>
               ))}
             </Container>
             {/* trendi */}
@@ -245,7 +249,10 @@ const ScreenName = styled.div`
     justify-content: center;
   }
 `;
-
+const FullPost = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const Container = styled.div`
   width: 100vw;
   height: 100%;
