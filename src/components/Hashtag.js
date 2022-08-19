@@ -335,7 +335,7 @@ const Container = styled.div`
     .post {
       width: 611px;
       height: 276px;
-      border-radius: 16px;
+      border-radius: 0px;
     }
     .avatarImg {
       margin: 25px 0 0 0;

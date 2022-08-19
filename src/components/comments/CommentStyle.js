@@ -9,6 +9,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   .makeComment {
+    width: 90%;
     display: flex;
     align-items: center;
     height: 83px;
@@ -19,6 +20,9 @@ export const Container = styled.div`
     height: 39px;
     border-radius: 50%;
     margin-right: 14px;
+  }
+  @media (max-width: 600px) {
+    width: 100vw;
   }
 `;
 
@@ -73,6 +77,9 @@ export const InputBox = styled.div`
     &:focus {
       outline: none;
     }
+  }
+  @media (max-width: 600px) {
+    width: 83%;
   }
 `;
 

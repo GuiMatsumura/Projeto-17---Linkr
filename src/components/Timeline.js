@@ -58,7 +58,6 @@ export default function Timeline() {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowWidth]);
-  
 
   const config = {
     headers: {
@@ -156,9 +155,9 @@ export default function Timeline() {
                         <img src={each.photo} />
                       </div>
                       <div className="icon">
-                      <Like postId={each.id} />
+                        {/* <Like postId={each.id} /> */}
+                        <h3>13 likes</h3>
                       </div>
-                      <h3>13 likes</h3>
                       <div className="comment">
                         <AiOutlineComment onClick={() => showComments(index)} />
                         <h3>{each.numberOfComments} comments</h3>
@@ -374,7 +373,7 @@ const Container = styled.div`
     .post {
       width: 100vw;
       height: 270px;
-      border-radius: 16px;
+      border-radius: 0px;
     }
     .avatarImg {
       margin: 25px 0 0 0;
