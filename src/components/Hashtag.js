@@ -41,7 +41,7 @@ export default function Hashtag() {
     headers: {
       Authorization: `Bearer ${defaultToken}`,
     },
-  }; 
+  };
   async function handleKey(event, id) {
     if (event.key === "Enter") {
       setInputDisable(!inputDisable);
@@ -115,9 +115,8 @@ export default function Hashtag() {
                       <img src={each.photo} />
                     </div>
                     <div className="icon">
-                      <IoHeartOutline color="#ffffff" size="22px" />
+                      <Like postId={each.id} />
                     </div>
-                    <h3>13 likes</h3>
                     <div className="comment">
                       <AiOutlineComment onClick={() => showComments(index)} />
                       <h3>{each.numberOfComments} comments</h3>
@@ -258,8 +257,8 @@ const Container = styled.div`
     }
   }
   .icon {
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 100%;
     margin: 15px 0 0 0;
   }
   .comment {
@@ -333,10 +332,10 @@ const Container = styled.div`
       }
     }
   }
-  @media (min-width: 600px) {
+  @media (max-width: 600px) {
     .post {
-      width: 611px;
-      height: 276px;
+      width: 100vw;
+      height: 270px;
       border-radius: 0px;
     }
     .avatarImg {

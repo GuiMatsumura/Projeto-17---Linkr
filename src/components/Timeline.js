@@ -19,11 +19,13 @@ import DeleteModal from "./delete-modal/index.jsx";
 import Comments from "./comments/Comments.jsx";
 import CommentContext from "../contexts/CommentContext.js";
 import Reposted from "./repostedBar/Reposted.jsx";
+import RepostModal from "./repost-modal/RepostModal.jsx";
 export default function Timeline() {
   const navigate = useNavigate();
 
   const { token, userId, image } = useContext(UserContext);
-  const { clickComment, setClickComment } = useContext(CommentContext);
+  const { clickComment, setClickComment, allComments } =
+    useContext(CommentContext);
   const defaultToken = token ? token : localStorage.getItem("token");
   const defaultImage = image ? image : localStorage.getItem("image");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
@@ -38,8 +40,9 @@ export default function Timeline() {
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalRepostOpen, setIsModalRepostOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
-
+  const [idRepost, setIdRepost] = useState();
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
@@ -101,10 +104,14 @@ export default function Timeline() {
     if (isModalOpen) setIsModalOpen(false);
     if (!isModalOpen) setIsModalOpen(true);
   }
+  function modalRepostOnOff() {
+    if (isModalRepostOpen) setIsModalRepostOpen(false);
+    if (!isModalRepostOpen) setIsModalRepostOpen(true);
+  }
 
-  function getIdFromPost(id, state) {
-    setIdToDelete(id);
-    modalOnOff(state);
+  function modalRepost(postId) {
+    setIdRepost(postId);
+    setIsModalRepostOpen(true);
   }
 
   async function handleKey(event, id) {
@@ -132,7 +139,7 @@ export default function Timeline() {
     }
   }
 
-  if (!isModalOpen) {
+  if (!isModalOpen && !isModalRepostOpen) {
     return (
       <AllContent>
         <Menu />
@@ -145,7 +152,6 @@ export default function Timeline() {
           setControlEffect={setControlEffect}
           controlEffect={controlEffect}
         />
-        {/* <Like></Like> */}
         {havePost ? (
           <SuperContainer>
             <Container>
@@ -171,7 +177,7 @@ export default function Timeline() {
                         <h3>{each.numberOfComments} comments</h3>
                       </div>
                       <div className="repost">
-                        <BiRepost />
+                        <BiRepost onClick={() => modalRepost(each.postId)} />
                         <h3>{each.repostCount} re-posts</h3>
                       </div>
                     </div>
@@ -186,7 +192,7 @@ export default function Timeline() {
                           value={
                             newDescription ? newDescription : each.description
                           }
-                          onKeyDown={(event) => handleKey(event, each.id)}
+                          onKeyDown={(event) => handleKey(event, each.postId)}
                           onChange={(e) => setNewDescription(e.target.value)}
                           disabled={inputDisable}
                         />
@@ -214,7 +220,12 @@ export default function Timeline() {
                     {each.userId === Number(defaultUserId) ? (
                       <>
                         <StyledEdit onClick={() => editDescription(index)} />
-                        <StyledDelete />
+                        <StyledDelete
+                          onClick={() => {
+                            setIsModalOpen(true);
+                            setIdToDelete(each.postId);
+                          }}
+                        />
                       </>
                     ) : null}
                   </div>
@@ -223,7 +234,7 @@ export default function Timeline() {
                       image={defaultImage}
                       userId={defaultUserId}
                       token={defaultToken}
-                      postId={each.id}
+                      postId={each.postId}
                       ownerId={each.userId}
                     />
                   ) : null}
@@ -239,7 +250,15 @@ export default function Timeline() {
         )}
       </AllContent>
     );
-  } else {
+  } else if (!isModalOpen && isModalRepostOpen) {
+    return (
+      <RepostModal
+        modalRepostOnOff={modalRepostOnOff}
+        postId={idRepost}
+        userId={defaultUserId}
+      />
+    );
+  } else if (isModalOpen && !isModalRepostOpen) {
     return <DeleteModal modalOnOff={modalOnOff} id={idToDelete} />;
   }
 }
@@ -320,7 +339,7 @@ const Container = styled.div`
       font-size: 11px;
     }
   }
-  .repost{
+  .repost {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -17,6 +17,9 @@ export const Container = styled.div`
     font-weight: 700;
     margin-left: 5px;
   }
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 export const StyledRepost = styled(BiRepost)`
   font-size: 20px;

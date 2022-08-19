@@ -4,9 +4,8 @@ import CommentContext from "../../contexts/CommentContext";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 export default function Comments({ image, userId, postId, token, ownerId }) {
-  const { clickComment, setClickComment } = useContext(CommentContext);
+  const { allComments, setAllComments } = useContext(CommentContext);
   const [newComment, setNewComment] = useState("");
-  const [allComments, setAllComments] = useState([]);
   const [commentsControl, setCommentsContol] = useState(false);
   const [following, setFollowing] = useState([]);
   useEffect(async () => {
