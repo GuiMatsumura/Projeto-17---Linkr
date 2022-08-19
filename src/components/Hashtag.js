@@ -114,12 +114,8 @@ export default function Hashtag() {
                     <div className="avatarImg">
                       <img src={each.photo} />
                     </div>
-                    <div className="icon">
-                      <IoHeartOutline color="#ffffff" size="22px" />
-                    </div>
-                    <h3>13 likes</h3>
+                    <Like postId={each.id}></Like>
                     <div className="comment">
-                      <AiOutlineComment onClick={() => showComments(index)} />
                       <h3>{each.numberOfComments} comments</h3>
                     </div>
                   </div>

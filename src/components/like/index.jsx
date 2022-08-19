@@ -101,7 +101,7 @@ export default function Like({ postId }) {
             } else if (usernameLikePost.length === 2) {
                 return `${usernameLikePost[0].username} e ${usernameLikePost[1].username}`;
             } else {
-                return `${usernameLikePost[0] ? usernameLikePost[0].username : "carregando"}`;
+                return `${usernameLikePost[0] ? usernameLikePost[0].username : "Ninguém curtiu"}`;
             }
         } else {
             if (usernameLikePost.length > 3) {
@@ -118,7 +118,7 @@ export default function Like({ postId }) {
 
     }
 
-    const showWhoLiked = showLiked()
+    const showWhoLiked = showLiked();
 
     return (
         <div data-tip={showWhoLiked} data-for="like">
