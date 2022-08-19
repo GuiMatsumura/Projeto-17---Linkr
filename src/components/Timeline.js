@@ -222,7 +222,6 @@ export default function Timeline() {
                 </FullPost>
               ))}
             </Container>
-            {/* trendi */}
             <Trending />
           </SuperContainer>
         ) : (
@@ -335,7 +334,6 @@ const Container = styled.div`
     }
     .metadata {
       height: 155px;
-
       display: flex;
       align-items: center;
       margin: 10px 0 0 0;
@@ -376,7 +374,6 @@ const Container = styled.div`
         img {
           width: 154px;
           height: 155px;
-
           border-radius: 0px 12px 13px 0px;
         }
       }
