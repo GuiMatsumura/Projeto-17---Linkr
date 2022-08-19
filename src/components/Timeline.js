@@ -156,7 +156,7 @@ export default function Timeline() {
                   <div className="post">
                     <div className="avatar">
                       <div className="avatarImg">
-                        <img src={each.foto} />
+                        <img src={each.photo} />
                       </div>
                       <div className="icon">
                         <IoHeartOutline color="#ffffff" size="22px" />
@@ -164,7 +164,7 @@ export default function Timeline() {
                       <h3>13 likes</h3>
                       <div className="comment">
                         <AiOutlineComment onClick={() => showComments(index)} />
-                        <h3>3 comments</h3>
+                        <h3>{each.numberOfComments} comments</h3>
                       </div>
                     </div>
                     <div className="postDescription">

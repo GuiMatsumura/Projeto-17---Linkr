@@ -5,9 +5,11 @@ export const Container = styled.div`
   background-color: #1e1e1e;
   border-radius: 0 0 16px 16px;
   width: 611px;
-  > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .makeComment {
     display: flex;
-    justify-content: space-around;
     align-items: center;
     height: 83px;
   }
@@ -16,20 +18,38 @@ export const Container = styled.div`
     width: 39px;
     height: 39px;
     border-radius: 50%;
+    margin-right: 14px;
   }
 `;
 
 export const BoxComment = styled.div`
   height: 71px;
-  width: 100%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #353535;
+  font-family: "Lato";
+  font-size: 14px;
+  div div {
+    display: flex;
+  }
   h1 {
     color: #f3f3f3;
+    font-weight: 700;
   }
   h2 {
     color: #acacac;
+    margin-top: 7px;
   }
   h3 {
     color: #565656;
+    margin-left: 4px;
+  }
+  img {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    margin-right: 18px;
   }
 `;
 
