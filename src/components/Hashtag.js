@@ -2,7 +2,6 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { IoHeartOutline } from "react-icons/io5";
 import { AiOutlineComment } from "react-icons/ai";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import CommentContext from "../contexts/CommentContext.js";
@@ -118,7 +117,7 @@ export default function Hashtag() {
                       <Like postId={each.id} />
                     </div>
                     <div className="comment">
-                      <AiOutlineComment onClick={() => showComments(index)} />
+                    <AiOutlineComment onClick={() => showComments(index)} />
                       <h3>{each.numberOfComments} comments</h3>
                     </div>
                   </div>

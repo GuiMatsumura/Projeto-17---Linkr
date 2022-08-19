@@ -3,13 +3,12 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
-import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import { AiOutlineComment } from "react-icons/ai";
 import { BiRepost } from "react-icons/bi";
 
 import { ReactTagify } from "react-tagify";
-import HashtagContext from "../contexts/HashtagContext.js";
+import useInterval from "use-interval";
 import Search from "./Search.js";
 import Like from "./like";
 import MakePost from "./MakePost";
@@ -43,6 +42,34 @@ export default function Timeline() {
   const [isModalRepostOpen, setIsModalRepostOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
   const [idRepost, setIdRepost] = useState();
+  const TIME = 15000;
+
+  useInterval(() => {
+    function showNewPosts(data) {
+      if (data.length > manyPosts) {
+        window.confirm("Deseja ver outros posts?")
+          ? setPosts(data)
+          : setPosts(posts);
+      }
+    }
+
+    const manyPosts = posts.length;
+    const promise = axios.get("http://localhost:4000/timeline", config);
+
+    promise.then((res) => {
+      res.data.length > manyPosts
+        ? showNewPosts(res.data)
+        : showNewPosts(posts);
+      posts.length > 0 ? setHavePost(true) : setHavePost(false);
+    });
+    promise.catch((err) => {
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+      navigate("/");
+    });
+  }, TIME);
+
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
@@ -147,7 +174,6 @@ export default function Timeline() {
         <ScreenName>
           <h2>timeline</h2>
         </ScreenName>
-
         <MakePost
           setControlEffect={setControlEffect}
           controlEffect={controlEffect}
