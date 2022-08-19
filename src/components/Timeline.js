@@ -160,7 +160,6 @@ export default function Timeline() {
       }
     }
     if (event.key === "Escape") {
-      console.log(showInput);
       setShowInput(!showInput);
       setNewDescription("");
     }

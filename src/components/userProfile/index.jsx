@@ -9,23 +9,16 @@ import Menu from "../menu";
 export default function UserProfile() {
   const { id } = useParams();
   const [userData, setUserData] = useState(false);
-  /* const { token } = useContext(UserContext);
-  const defaultToken = token ? token : localStorage.getItem("token"); */
+
   useEffect(() => {
-    /* const config = {
-      headers: {
-        Authorization: `Bearer ${defaultToken}`,
-      },
-    }; */
+
 
     const LINK_API = `https://back-linkr-10.herokuapp.com/user/${id}`;
-    /* const LINK_API = `https://back-linkr-10.herokuapp.com/user/${id}`; */
     const request = axios.get(LINK_API);
     request.then((response) => {
       const { data } = response;
       setUserData(data);
-      console.log(data);
-      console.log(data.profile[0].photo);
+     
     });
     request.catch((err) => {
       console.log(err.response);

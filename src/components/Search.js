@@ -10,7 +10,6 @@ export default function Search({ display }) {
   const [filteredPersons, setFilteredPersons] = useState([]);
   async function getAllUsers() {
     const allUsers = await getUsers();
-    console.log(searchField);
     setFilteredPersons(
       allUsers.filter((person) => {
         return (

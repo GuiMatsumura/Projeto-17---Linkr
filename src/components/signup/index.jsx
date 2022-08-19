@@ -15,12 +15,7 @@ export default function Signup() {
   function submitData(event) {
     event.preventDefault();
     setLoading(true);
-    console.log({
-      email,
-      username,
-      password,
-      photo
-    })
+  
     const LINK_API = "https://back-linkr-10.herokuapp.com/signup";
     const request = axios.post(LINK_API, {
       email,

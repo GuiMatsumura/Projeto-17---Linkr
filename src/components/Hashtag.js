@@ -49,7 +49,11 @@ export default function Hashtag() {
         postId: id,
       };
       try {
-        await axios.put("https://back-linkr-10.herokuapp.com/post", body, config);
+        await axios.put(
+          "https://back-linkr-10.herokuapp.com/post",
+          body,
+          config
+        );
         setShowInput(false);
         setNewDescription("");
         setInputDisable(false);
@@ -60,7 +64,6 @@ export default function Hashtag() {
       }
     }
     if (event.key === "Escape") {
-      console.log(showInput);
       setShowInput(!showInput);
       setNewDescription("");
     }
@@ -117,7 +120,7 @@ export default function Hashtag() {
                       <Like postId={each.id} />
                     </div>
                     <div className="comment">
-                    <AiOutlineComment onClick={() => showComments(index)} />
+                      <AiOutlineComment onClick={() => showComments(index)} />
                       <h3>{each.numberOfComments} comments</h3>
                     </div>
                   </div>
@@ -162,9 +165,7 @@ export default function Hashtag() {
                       <StyledEdit onClick={() => editDescription(index)} />
                       <StyledDelete />
                     </>
-                  ) : (
-                    console.log(each.userId)
-                  )}
+                  ) : null}
                 </div>
                 {clickComment && index === commentIndex ? (
                   <Comments

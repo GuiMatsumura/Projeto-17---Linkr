@@ -7,7 +7,6 @@ import { Background, Box, Text, Buttons } from "./style";
 
 export default function DeleteModal({ modalOnOff, id }) {
   const [loading, setLoading] = useState(false);
-  /* const token = localStorage.getItem("token"); */
   const { token } = useContext(UserContext);
   const defaultToken = token ? token : localStorage.getItem("token");
   const config = {
@@ -16,7 +15,6 @@ export default function DeleteModal({ modalOnOff, id }) {
     },
   };
 
-  /* console.log(id,defaultToken) */
 
   function deletePost(id) {
     const LINK_API = `https://back-linkr-10.herokuapp.com/delete/${id}`;

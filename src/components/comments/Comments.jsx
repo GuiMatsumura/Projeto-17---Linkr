@@ -39,7 +39,6 @@ export default function Comments({ image, userId, postId, token, ownerId }) {
       console.log(error);
     }
   }
-  console.log(following);
   return (
     <Container>
       {allComments.map((each, index) => (
