@@ -8,11 +8,19 @@ export default function Comments({ image, userId, postId, token, ownerId }) {
   const [newComment, setNewComment] = useState("");
   const [allComments, setAllComments] = useState([]);
   const [commentsControl, setCommentsContol] = useState(false);
+  const [following, setFollowing] = useState([]);
   useEffect(async () => {
-    const promise = await axios.get(`http://localhost:4000/comments/${postId}`);
-    setAllComments(promise.data);
+    const promiseComments = await axios.get(
+      `http://localhost:4000/comments/${postId}`
+    );
+    const promiseFollow = await axios.get(
+      `http://localhost:4000/following/${userId}`
+    );
+    console.log(...promiseFollow.data);
+    setAllComments(promiseComments.data);
+    setFollowing(promiseFollow.data);
   }, [commentsControl]);
-  console.log(allComments);
+
   async function handleComment() {
     const config = {
       headers: {
@@ -32,7 +40,7 @@ export default function Comments({ image, userId, postId, token, ownerId }) {
       console.log(error);
     }
   }
-
+  console.log(following);
   return (
     <Container>
       {allComments.map((each, index) => (
@@ -42,7 +50,11 @@ export default function Comments({ image, userId, postId, token, ownerId }) {
             <div>
               <h1>{each.username}</h1>
               <h3>
-                {each.userId === Number(ownerId) ? "• post's author" : null}
+                {each.userId === Number(ownerId)
+                  ? "• post's author"
+                  : following.some((e) => e.accountFollowed === each.userId)
+                  ? "• following"
+                  : null}
               </h3>
             </div>
             <h2>{each.comment}</h2>
