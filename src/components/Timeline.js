@@ -100,11 +100,6 @@ export default function Timeline() {
     if (!isModalOpen) setIsModalOpen(true);
   }
 
-  function getIdFromPost(id, state) {
-    setIdToDelete(id);
-    modalOnOff(state);
-  }
-
   async function handleKey(event, id) {
     if (event.key === "Enter") {
       setInputDisable(!inputDisable);
@@ -201,7 +196,7 @@ export default function Timeline() {
                     {each.userId === Number(defaultUserId) ? (
                       <>
                         <StyledEdit onClick={() => editDescription(index)} />
-                        <StyledDelete />
+                        <StyledDelete onClick={() => setIsModalOpen(true)}/>
                       </>
                     ) : null}
                   </div>
