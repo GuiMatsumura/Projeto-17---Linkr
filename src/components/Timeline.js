@@ -16,7 +16,7 @@ import Trending from "./Trendings.js";
 import DeleteModal from "./delete-modal/index.jsx";
 import Comments from "./comments/Comments.jsx";
 import CommentContext from "../contexts/CommentContext.js";
-
+import Reposted from "./repostedBar/Reposted.jsx";
 export default function Timeline() {
   const navigate = useNavigate();
 
@@ -149,13 +149,20 @@ export default function Timeline() {
             <Container>
               {posts.map((each, index) => (
                 <FullPost key={index}>
+                  {each.repostedByName ? (
+                    each.repostedById === Number(defaultUserId) ? (
+                      <Reposted userName={"you"} />
+                    ) : (
+                      <Reposted userName={each.repostedByName} />
+                    )
+                  ) : null}
                   <div className="post">
                     <div className="avatar">
                       <div className="avatarImg">
                         <img src={each.photo} />
                       </div>
                       <div className="icon">
-                        <Like postId={each.id} />
+                        <Like postId={each.postId} />
                       </div>
                       <div className="comment">
                         <AiOutlineComment onClick={() => showComments(index)} />
