@@ -37,7 +37,7 @@ export default function Timeline() {
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
-  console.log(clickComment);
+
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
@@ -58,8 +58,7 @@ export default function Timeline() {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowWidth]);
-  console.log(windowWidth);
-  console.log(display);
+  
 
   const config = {
     headers: {
@@ -132,8 +131,6 @@ export default function Timeline() {
     }
   }
 
-  console.log(posts);
-  console.log(havePost);
   if (!isModalOpen) {
     return (
       <AllContent>
@@ -159,7 +156,7 @@ export default function Timeline() {
                         <img src={each.photo} />
                       </div>
                       <div className="icon">
-                        <IoHeartOutline color="#ffffff" size="22px" />
+                      <Like postId={each.id} />
                       </div>
                       <h3>13 likes</h3>
                       <div className="comment">
@@ -287,12 +284,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    h3 {
-      margin-top: 10px;
-      color: white;
-      font-size: 12px;
-      font-family: "Lato";
-    }
   }
   .avatarImg {
     margin: 10px 0 0 0;
@@ -303,8 +294,8 @@ const Container = styled.div`
     }
   }
   .icon {
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 100%;
     margin: 15px 0 0 0;
   }
   .comment {
