@@ -7,6 +7,7 @@ import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import { AiOutlineComment } from "react-icons/ai";
 import { ReactTagify } from "react-tagify";
+import useInterval from 'use-interval';
 import HashtagContext from "../contexts/HashtagContext.js";
 import Search from "./Search.js";
 import Like from "./like";
@@ -37,6 +38,39 @@ export default function Timeline() {
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
+  const TIME = 15 * 1000;
+
+  const updatePosts = () => {
+
+    useInterval(() => {
+
+      function showNewPosts(data) {
+        if (data.length > manyPosts) {
+          window.confirm("Deseja ver outros posts?")
+            ? setPosts(data) : setPosts(posts);
+        }
+
+      }
+
+      const manyPosts = posts.length;
+      const promise = axios.get("http://localhost:4000/timeline", config);
+
+      promise.then((res) => {
+        res.data.length > manyPosts ? showNewPosts(res.data) : showNewPosts(posts);
+        posts.length > 0 ? setHavePost(true) : setHavePost(false);
+      });
+      promise.catch((err) => {
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+        navigate("/");
+      }
+
+      );
+
+    }, TIME); 
+  }
+
 
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
@@ -133,12 +167,10 @@ export default function Timeline() {
         <ScreenName>
           <h2>timeline</h2>
         </ScreenName>
-
         <MakePost
           setControlEffect={setControlEffect}
           controlEffect={controlEffect}
         />
-        {/* <Like></Like> */}
         {havePost ? (
           <SuperContainer>
             <Container>
@@ -148,6 +180,7 @@ export default function Timeline() {
                     <div className="avatar">
                       <div className="avatarImg">
                         <img src={each.photo} />
+
                       </div>
                       <div className="icon">
                         <Like postId={each.id} />
@@ -211,14 +244,18 @@ export default function Timeline() {
                   ) : null}
                 </FullPost>
               ))}
+
             </Container>
             <Trending />
+
           </SuperContainer>
+
         ) : (
           <NoPost>
             <h3>THERE ARE NO POSTS YET</h3>
           </NoPost>
         )}
+        {updatePosts()}
       </AllContent>
     );
   } else {
