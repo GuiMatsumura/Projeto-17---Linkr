@@ -2,7 +2,6 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { IoHeartOutline } from "react-icons/io5";
 import { AiOutlineComment } from "react-icons/ai";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import CommentContext from "../contexts/CommentContext.js";
@@ -41,7 +40,7 @@ export default function Hashtag() {
     headers: {
       Authorization: `Bearer ${defaultToken}`,
     },
-  }; 
+  };
   async function handleKey(event, id) {
     if (event.key === "Enter") {
       setInputDisable(!inputDisable);
@@ -114,8 +113,11 @@ export default function Hashtag() {
                     <div className="avatarImg">
                       <img src={each.photo} />
                     </div>
-                    <Like postId={each.id}></Like>
+                    <div className="icon">
+                      <Like postId={each.id} />
+                    </div>
                     <div className="comment">
+                    <AiOutlineComment onClick={() => showComments(index)} />
                       <h3>{each.numberOfComments} comments</h3>
                     </div>
                   </div>
@@ -254,8 +256,8 @@ const Container = styled.div`
     }
   }
   .icon {
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 100%;
     margin: 15px 0 0 0;
   }
   .comment {
@@ -329,10 +331,10 @@ const Container = styled.div`
       }
     }
   }
-  @media (min-width: 600px) {
+  @media (max-width: 600px) {
     .post {
-      width: 611px;
-      height: 276px;
+      width: 100vw;
+      height: 270px;
       border-radius: 0px;
     }
     .avatarImg {

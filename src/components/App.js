@@ -13,8 +13,8 @@ export default function App() {
   const [token, setToken] = useState("");
   const [image, setImage] = useState("");
   const [userId, setUserId] = useState();
-  const [username, setUsername] = useState("")
-  const [hashtagClicked, setHashtagClicked] = useState("");
+  const [username, setUsername] = useState("");
+  const [allComments, setAllComments] = useState([]);
   const [controlTrending, setControlTrending] = useState(false);
   const [controlHashtag, setControlHashtag] = useState(false);
   const [clickComment, setClickComment] = useState(false);
@@ -28,7 +28,7 @@ export default function App() {
         userId,
         setUserId,
         username,
-        setUsername
+        setUsername,
       }}
     >
       <HashtagContext.Provider
@@ -39,7 +39,9 @@ export default function App() {
           setControlHashtag,
         }}
       >
-        <CommentContext.Provider value={{ clickComment, setClickComment }}>
+        <CommentContext.Provider
+          value={{ clickComment, setClickComment, allComments, setAllComments }}
+        >
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Signin />} />

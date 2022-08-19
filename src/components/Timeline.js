@@ -3,12 +3,12 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
-import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import { AiOutlineComment } from "react-icons/ai";
+import { BiRepost } from "react-icons/bi";
+
 import { ReactTagify } from "react-tagify";
-import useInterval from 'use-interval';
-import HashtagContext from "../contexts/HashtagContext.js";
+import useInterval from "use-interval";
 import Search from "./Search.js";
 import Like from "./like";
 import MakePost from "./MakePost";
@@ -17,12 +17,14 @@ import Trending from "./Trendings.js";
 import DeleteModal from "./delete-modal/index.jsx";
 import Comments from "./comments/Comments.jsx";
 import CommentContext from "../contexts/CommentContext.js";
-
+import Reposted from "./repostedBar/Reposted.jsx";
+import RepostModal from "./repost-modal/RepostModal.jsx";
 export default function Timeline() {
   const navigate = useNavigate();
 
   const { token, userId, image } = useContext(UserContext);
-  const { clickComment, setClickComment } = useContext(CommentContext);
+  const { clickComment, setClickComment, allComments } =
+    useContext(CommentContext);
   const defaultToken = token ? token : localStorage.getItem("token");
   const defaultImage = image ? image : localStorage.getItem("image");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
@@ -37,39 +39,36 @@ export default function Timeline() {
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalRepostOpen, setIsModalRepostOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
-
+  const [idRepost, setIdRepost] = useState();
   const TIME = 15000;
 
-    useInterval(() => {
-
-      function showNewPosts(data) {
-        if (data.length > manyPosts) {
-          window.confirm("Deseja ver outros posts?")
-            ? setPosts(data) : setPosts(posts);
-        }
-
+  useInterval(() => {
+    function showNewPosts(data) {
+      if (data.length > manyPosts) {
+        window.confirm("Deseja ver outros posts?")
+          ? setPosts(data)
+          : setPosts(posts);
       }
+    }
 
-      const manyPosts = posts.length;
-      const promise = axios.get("http://localhost:4000/timeline", config);
+    const manyPosts = posts.length;
+    const promise = axios.get("http://localhost:4000/timeline", config);
 
-      promise.then((res) => {
-        res.data.length > manyPosts ? showNewPosts(res.data) : showNewPosts(posts);
-        posts.length > 0 ? setHavePost(true) : setHavePost(false);
-      });
-      promise.catch((err) => {
-        alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
-        );
-        navigate("/");
-      }
-
+    promise.then((res) => {
+      res.data.length > manyPosts
+        ? showNewPosts(res.data)
+        : showNewPosts(posts);
+      posts.length > 0 ? setHavePost(true) : setHavePost(false);
+    });
+    promise.catch((err) => {
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
       );
-
-    }, TIME); 
-
-
+      navigate("/");
+    });
+  }, TIME);
 
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
@@ -132,6 +131,15 @@ export default function Timeline() {
     if (isModalOpen) setIsModalOpen(false);
     if (!isModalOpen) setIsModalOpen(true);
   }
+  function modalRepostOnOff() {
+    if (isModalRepostOpen) setIsModalRepostOpen(false);
+    if (!isModalRepostOpen) setIsModalRepostOpen(true);
+  }
+
+  function modalRepost(postId) {
+    setIdRepost(postId);
+    setIsModalRepostOpen(true);
+  }
 
   async function handleKey(event, id) {
     if (event.key === "Enter") {
@@ -158,7 +166,7 @@ export default function Timeline() {
     }
   }
 
-  if (!isModalOpen) {
+  if (!isModalOpen && !isModalRepostOpen) {
     return (
       <AllContent>
         <Menu />
@@ -175,11 +183,17 @@ export default function Timeline() {
             <Container>
               {posts.map((each, index) => (
                 <FullPost key={index}>
+                  {each.repostedByName ? (
+                    each.repostedById === Number(defaultUserId) ? (
+                      <Reposted userName={"you"} />
+                    ) : (
+                      <Reposted userName={each.repostedByName} />
+                    )
+                  ) : null}
                   <div className="post">
                     <div className="avatar">
                       <div className="avatarImg">
                         <img src={each.photo} />
-
                       </div>
                       <div className="icon">
                         <Like postId={each.postId} />
@@ -187,6 +201,10 @@ export default function Timeline() {
                       <div className="comment">
                         <AiOutlineComment onClick={() => showComments(index)} />
                         <h3>{each.numberOfComments} comments</h3>
+                      </div>
+                      <div className="repost">
+                        <BiRepost onClick={() => modalRepost(each.postId)} />
+                        <h3>{each.repostCount} re-posts</h3>
                       </div>
                     </div>
                     <div className="postDescription">
@@ -200,7 +218,7 @@ export default function Timeline() {
                           value={
                             newDescription ? newDescription : each.description
                           }
-                          onKeyDown={(event) => handleKey(event, each.id)}
+                          onKeyDown={(event) => handleKey(event, each.postId)}
                           onChange={(e) => setNewDescription(e.target.value)}
                           disabled={inputDisable}
                         />
@@ -228,7 +246,12 @@ export default function Timeline() {
                     {each.userId === Number(defaultUserId) ? (
                       <>
                         <StyledEdit onClick={() => editDescription(index)} />
-                        <StyledDelete onClick={() => setIsModalOpen(true)}/>
+                        <StyledDelete
+                          onClick={() => {
+                            setIsModalOpen(true);
+                            setIdToDelete(each.postId);
+                          }}
+                        />
                       </>
                     ) : null}
                   </div>
@@ -237,27 +260,31 @@ export default function Timeline() {
                       image={defaultImage}
                       userId={defaultUserId}
                       token={defaultToken}
-                      postId={each.id}
+                      postId={each.postId}
                       ownerId={each.userId}
                     />
                   ) : null}
                 </FullPost>
               ))}
-
             </Container>
             <Trending />
-
           </SuperContainer>
-
         ) : (
           <NoPost>
             <h3>THERE ARE NO POSTS YET</h3>
           </NoPost>
         )}
-        
       </AllContent>
     );
-  } else {
+  } else if (!isModalOpen && isModalRepostOpen) {
+    return (
+      <RepostModal
+        modalRepostOnOff={modalRepostOnOff}
+        postId={idRepost}
+        userId={defaultUserId}
+      />
+    );
+  } else if (isModalOpen && !isModalRepostOpen) {
     return <DeleteModal modalOnOff={modalOnOff} id={idToDelete} />;
   }
 }
@@ -328,6 +355,17 @@ const Container = styled.div`
     margin: 15px 0 0 0;
   }
   .comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    color: #ffffff;
+    font-size: 24px;
+    h3 {
+      font-size: 11px;
+    }
+  }
+  .repost {
     display: flex;
     flex-direction: column;
     align-items: center;
