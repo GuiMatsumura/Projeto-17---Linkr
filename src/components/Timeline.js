@@ -93,7 +93,7 @@ export default function Timeline() {
   }
 
   function showComments(index) {
-    setClickComment(!clickComment);
+    setClickComment(true);
     setCommentIndex(index);
   }
 
@@ -216,7 +216,6 @@ export default function Timeline() {
                       userId={defaultUserId}
                       token={defaultToken}
                       postId={each.id}
-
                     />
                   ) : null}
                 </FullPost>

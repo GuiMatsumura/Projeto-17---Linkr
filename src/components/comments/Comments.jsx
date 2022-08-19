@@ -6,9 +6,8 @@ import axios from "axios";
 export default function Comments({ image, userId, postId, token }) {
   const { clickComment, setClickComment } = useContext(CommentContext);
   const [newComment, setNewComment] = useState("");
-
+  let promise;
   async function handleComment() {
-    console.log(newComment);
     const config = {
       headers: {
         Authorization: "Bearer " + token,
@@ -20,12 +19,16 @@ export default function Comments({ image, userId, postId, token }) {
       userId,
     };
     try {
-      await axios.post("http://localhost:4000/comment", body, config);
+     await axios.post("http://localhost:4000/comment", body, config);
+
+      console.log(newComment);
       setNewComment("");
-    } catch (error) {
+    } catch (error) {}
+    promise.catch((error) => {
       console.log(error);
-    }
+    });
   }
+
   return (
     <Container>
       <div>
@@ -35,6 +38,7 @@ export default function Comments({ image, userId, postId, token }) {
             type="text"
             placeholder="write a comment..."
             autoFocus
+            value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
           />
           <StyledSend onClick={handleComment} />
