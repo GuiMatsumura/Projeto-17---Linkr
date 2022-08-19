@@ -101,6 +101,7 @@ async function handleSubmit(
     setButtonCtt("Publish");
     setControlEffect(!controlEffect);
     setControlTrending(!controlTrending);
+    window.location.reload();
   } catch (error) {
     console.log(error);
     alert("Houve um erro ao publicar seu link: " + error.response.data);

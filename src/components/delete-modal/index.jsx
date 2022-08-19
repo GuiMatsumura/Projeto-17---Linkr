@@ -26,7 +26,7 @@ export default function DeleteModal({ modalOnOff, id }) {
     request.then(response => {
       setLoading(false);
       modalOnOff(false);
-      window.location.reload()
+      window.location.reload();
     });
     request.catch(err => {
       console.log(err.response);

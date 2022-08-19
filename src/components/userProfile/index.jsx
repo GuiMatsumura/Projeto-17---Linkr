@@ -5,33 +5,35 @@ import { useParams } from "react-router-dom";
 import { Header, Body, LeftBox, RightBox, Post, Posts, Navbar } from "./style"
 import Trending from "../Trendings";
 import Menu from "../menu";
+import UserContext from "../../contexts/UserContext.js";
 
 export default function UserProfile() {
   const { id } = useParams()
+  const { token, userId } = useContext(UserContext);
+  const defaultToken = token ? token : localStorage.getItem("token");
   const [userData, setUserData] = useState(false);
-  /* const { token } = useContext(UserContext);
-  const defaultToken = token ? token : localStorage.getItem("token"); */
+
   useEffect(() => {
-    /* const config = {
+    const config = {
       headers: {
         Authorization: `Bearer ${defaultToken}`,
       },
-    }; */
+    };
 
-    const LINK_API = `http://localhost:4000/user/${id}`;
-    /* const LINK_API = `https://back-linkr-10.herokuapp.com/user/${id}`; */
-    const request = axios.get(LINK_API);
+    const LINK_API = `https://back-linkr-10.herokuapp.com/user/${id}`;
+    const request = axios.get(LINK_API, config);
     request.then(response => {
       const { data } = response;
-      setUserData(data)
-      console.log(data)
-      console.log(data.profile[0].photo)
+      setUserData(data);
     });
     request.catch(err => {
       console.log(err.response)
     });
   }, []);
 
+/* const idUser = localStorage.getItem("userId")
+  console.log(idUser) */
+  
   return (
     <>
     <Navbar>
@@ -55,7 +57,7 @@ export default function UserProfile() {
                   <img src={userData.profile[0].photo}
                     alt={"user avatar"} />
                   <IoHeartOutline className="likeButton" />
-                  <h1>{numberOfLikes} likes</h1>
+                  <h1>{numberOfLikes ? numberOfLikes : "0"} likes</h1>
                 </LeftBox>
 
                 <RightBox>
