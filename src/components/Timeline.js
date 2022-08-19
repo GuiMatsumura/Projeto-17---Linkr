@@ -134,7 +134,7 @@ export default function Timeline() {
     return (
       <AllContent>
         <Menu />
-        <Search display={display} />
+        <Search display={display} token={defaultToken} />
         <ScreenName>
           <h2>timeline</h2>
         </ScreenName>
@@ -155,8 +155,7 @@ export default function Timeline() {
                         <img src={each.photo} />
                       </div>
                       <div className="icon">
-                        {/* <Like postId={each.id} /> */}
-                        <h3>13 likes</h3>
+                        <Like postId={each.id} />
                       </div>
                       <div className="comment">
                         <AiOutlineComment onClick={() => showComments(index)} />

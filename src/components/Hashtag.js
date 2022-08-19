@@ -21,7 +21,6 @@ export default function Hashtag() {
   const defaultToken = token ? token : localStorage.getItem("token");
   const defaultImage = image ? image : localStorage.getItem("image");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
-  console.log(defaultUserId);
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
   const [showInput, setShowInput] = useState(false);
@@ -42,7 +41,7 @@ export default function Hashtag() {
     headers: {
       Authorization: `Bearer ${defaultToken}`,
     },
-  };
+  }; 
   async function handleKey(event, id) {
     if (event.key === "Enter") {
       setInputDisable(!inputDisable);
@@ -68,7 +67,10 @@ export default function Hashtag() {
     }
   }
   useEffect(() => {
-    const promise = axios.get(`http://localhost:4000/hashtag/${hashtag}`);
+    const promise = axios.get(
+      `http://localhost:4000/hashtag/${hashtag}`,
+      config
+    );
 
     promise.then((res) => {
       setPosts(res.data);
