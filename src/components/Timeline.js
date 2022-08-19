@@ -38,9 +38,8 @@ export default function Timeline() {
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
-  const TIME = 15 * 1000;
 
-  const updatePosts = () => {
+  const TIME = 15000;
 
     useInterval(() => {
 
@@ -69,7 +68,7 @@ export default function Timeline() {
       );
 
     }, TIME); 
-  }
+
 
 
   function navigateTag(tag) {
@@ -183,7 +182,7 @@ export default function Timeline() {
 
                       </div>
                       <div className="icon">
-                        <Like postId={each.id} />
+                        <Like postId={each.postId} />
                       </div>
                       <div className="comment">
                         <AiOutlineComment onClick={() => showComments(index)} />
@@ -255,7 +254,7 @@ export default function Timeline() {
             <h3>THERE ARE NO POSTS YET</h3>
           </NoPost>
         )}
-        {updatePosts()}
+        
       </AllContent>
     );
   } else {
