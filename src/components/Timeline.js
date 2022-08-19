@@ -54,7 +54,7 @@ export default function Timeline() {
     }
 
     const manyPosts = posts.length;
-    const promise = axios.get("http://localhost:4000/timeline", config);
+    const promise = axios.get("https://back-linkr-10.herokuapp.com/timeline", config);
 
     promise.then((res) => {
       res.data.length > manyPosts
@@ -98,7 +98,7 @@ export default function Timeline() {
   };
 
   useEffect(() => {
-    const promise = axios.get("http://localhost:4000/timeline", config);
+    const promise = axios.get("https://back-linkr-10.herokuapp.com/timeline", config);
 
     promise.then((res) => {
       setPosts(res.data);
@@ -149,7 +149,7 @@ export default function Timeline() {
         postId: id,
       };
       try {
-        await axios.put("http://localhost:4000/post", body, config);
+        await axios.put("https://back-linkr-10.herokuapp.com/post", body, config);
         setShowInput(false);
         setNewDescription("");
         setInputDisable(false);

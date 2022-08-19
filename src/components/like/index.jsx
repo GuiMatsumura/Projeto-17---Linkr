@@ -21,7 +21,7 @@ export default function Like({ postId }) {
   const COLOR_NOLIKE = "white";
 
   useEffect(() => {
-    const URL = `http://localhost:4000/likes/${postId}`;
+    const URL = `https://back-linkr-10.herokuapp.com/likes/${postId}`;
     const config = { headers: { Authorization: `Bearer ${defaultToken}` } };
 
     const request = axios.get(URL, config);
@@ -66,7 +66,7 @@ export default function Like({ postId }) {
 
     function getLikes() {
 
-        const URL = `http://localhost:4000/likes/many/${postId}`;
+        const URL = `https://back-linkr-10.herokuapp.com/likes/many/${postId}`;
         const request = axios.get(URL);
 
         request.then((response) => {
@@ -80,7 +80,7 @@ export default function Like({ postId }) {
     function submitLike() {
 
         const body = { like: clickedLike, postId };
-        const URL = "http://localhost:4000/likes";
+        const URL = "https://back-linkr-10.herokuapp.com/likes";
         const config = { headers: { Authorization: 'Bearer ' + defaultToken } };
 
         const request = axios.post(URL, body, config);

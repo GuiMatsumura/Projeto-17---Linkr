@@ -24,7 +24,7 @@ export default function RepostModal({ postId, userId, modalRepostOnOff }) {
       userId: Number(userId),
     };
     try {
-      await axios.post("http://localhost:4000/repost", body, config);
+      await axios.post("https://back-linkr-10.herokuapp.com/repost", body, config);
       setLoading(false);
       modalRepostOnOff(false);
       window.location.reload();

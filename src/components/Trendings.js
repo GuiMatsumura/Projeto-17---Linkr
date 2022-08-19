@@ -17,7 +17,7 @@ export default function Trending() {
   }
 
   useEffect(() => {
-    const promise = axios.get("http://localhost:4000/trending");
+    const promise = axios.get("https://back-linkr-10.herokuapp.com/trending");
 
     promise.then((res) => {
       setTrending(res.data);

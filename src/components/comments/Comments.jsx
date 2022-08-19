@@ -10,10 +10,10 @@ export default function Comments({ image, userId, postId, token, ownerId }) {
   const [following, setFollowing] = useState([]);
   useEffect(async () => {
     const promiseComments = await axios.get(
-      `http://localhost:4000/comments/${postId}`
+      `https://back-linkr-10.herokuapp.com/comments/${postId}`
     );
     const promiseFollow = await axios.get(
-      `http://localhost:4000/following/${userId}`
+      `https://back-linkr-10.herokuapp.com/following/${userId}`
     );
     console.log(...promiseFollow.data);
     setAllComments(promiseComments.data);
@@ -32,7 +32,7 @@ export default function Comments({ image, userId, postId, token, ownerId }) {
       userId,
     };
     try {
-      await axios.post("http://localhost:4000/comment", body, config);
+      await axios.post("https://back-linkr-10.herokuapp.com/comment", body, config);
       setCommentsContol(!commentsControl);
       setNewComment("");
     } catch (error) {

@@ -49,7 +49,7 @@ export default function Hashtag() {
         postId: id,
       };
       try {
-        await axios.put("http://localhost:4000/post", body, config);
+        await axios.put("https://back-linkr-10.herokuapp.com/post", body, config);
         setShowInput(false);
         setNewDescription("");
         setInputDisable(false);
@@ -67,7 +67,7 @@ export default function Hashtag() {
   }
   useEffect(() => {
     const promise = axios.get(
-      `http://localhost:4000/hashtag/${hashtag}`,
+      `https://back-linkr-10.herokuapp.com/hashtag/${hashtag}`,
       config
     );
 

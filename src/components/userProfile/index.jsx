@@ -18,7 +18,7 @@ export default function UserProfile() {
       },
     }; */
 
-    const LINK_API = `http://localhost:4000/user/${id}`;
+    const LINK_API = `https://back-linkr-10.herokuapp.com/user/${id}`;
     /* const LINK_API = `https://back-linkr-10.herokuapp.com/user/${id}`; */
     const request = axios.get(LINK_API);
     request.then((response) => {
