@@ -5,6 +5,7 @@ import axios from "axios";
 import UserContext from "../contexts/UserContext.js";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
+import { AiOutlineComment } from "react-icons/ai";
 import { ReactTagify } from "react-tagify";
 import HashtagContext from "../contexts/HashtagContext.js";
 import Search from "./Search.js";
@@ -13,12 +14,16 @@ import MakePost from "./MakePost";
 import Menu from "./menu/index.jsx";
 import Trending from "./Trendings.js";
 import DeleteModal from "./delete-modal/index.jsx";
+import Comments from "./comments/Comments.jsx";
+import CommentContext from "../contexts/CommentContext.js";
 
 export default function Timeline() {
   const navigate = useNavigate();
 
-  const { token, userId } = useContext(UserContext);
+  const { token, userId, image } = useContext(UserContext);
+  const { clickComment, setClickComment } = useContext(CommentContext);
   const defaultToken = token ? token : localStorage.getItem("token");
+  const defaultImage = image ? image : localStorage.getItem("image");
   const defaultUserId = userId ? userId : localStorage.getItem("userId");
   const [posts, setPosts] = useState([]);
   const [havePost, setHavePost] = useState(false);
@@ -26,13 +31,12 @@ export default function Timeline() {
   const [showInput, setShowInput] = useState(false);
   const [newDescription, setNewDescription] = useState("");
   const [inputIndex, setInputIndex] = useState();
+  const [commentIndex, setCommentIndex] = useState();
   const [inputDisable, setInputDisable] = useState(false);
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   const [display, setDisplay] = useState("flex");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(false);
-
-  // const {} = useContext(HashtagContext);
 
   function navigateTag(tag) {
     const hashtag = tag.replace("#", "");
@@ -54,8 +58,6 @@ export default function Timeline() {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowWidth]);
-  console.log(windowWidth);
-  console.log(display);
 
   const config = {
     headers: {
@@ -69,7 +71,6 @@ export default function Timeline() {
     promise.then((res) => {
       setPosts(res.data);
       posts.length > 0 ? setHavePost(true) : setHavePost(false);
-      // havePost ? console.log("ok") : setControlEffect(!controlEffect);
     });
     promise.catch((err) => {
       alert(
@@ -87,6 +88,11 @@ export default function Timeline() {
     setShowInput(!showInput);
     setInputIndex(index);
     setNewDescription("");
+  }
+
+  function showComments(index) {
+    setClickComment(true);
+    setCommentIndex(index);
   }
 
   function modalOnOff() {
@@ -124,15 +130,11 @@ export default function Timeline() {
     }
   }
 
-  console.log(posts);
-
-  console.log(havePost);
   if (!isModalOpen) {
     return (
-      // <div style={{ background: "gray", display: "flex", flexDirection: "column", alignItems: "center" }}>
       <AllContent>
         <Menu />
-        <Search display={display} />
+        <Search display={display} token={defaultToken} />
         <ScreenName>
           <h2>timeline</h2>
         </ScreenName>
@@ -143,65 +145,78 @@ export default function Timeline() {
         />
         {/* <Like></Like> */}
         {havePost ? (
-          // <ReactTagify colors={'#FFFFFF'}> // </ReactTagify>
           <SuperContainer>
             <Container>
               {posts.map((each, index) => (
-                <div key={index} className="post">
-                  <div className="avatar">
-                    <div className="avatarImg">
-                      <img src={each.foto} />
-                    </div>
-                    <div className="icon">
-                      <Like postId={each.id} />
-                    </div>
-                  </div>
-                  <div className="postDescription">
-                    <Link to={`/user/${each.userId}`}>
-                      <h1>{each.name}</h1>
-                    </Link>
-
-                    {showInput && index === inputIndex ? (
-                      <input
-                        autoFocus
-                        value={
-                          newDescription ? newDescription : each.description
-                        }
-                        onKeyDown={(event) => handleKey(event, each.id)}
-                        onChange={(e) => setNewDescription(e.target.value)}
-                        disabled={inputDisable}
-                      />
-                    ) : (
-                      <ReactTagify
-                        colors={"#ffffff"}
-                        tagClicked={(tag) => navigateTag(tag)}
-                      >
-                        <h2>{each.description}</h2>
-                      </ReactTagify>
-                    )}
-                    <a href={each.url}>
-                      <div className="metadata">
-                        <div className="metadataInfo">
-                          <h2>{each.metadataTitle}</h2>
-                          <h3>{each.metadataDescription}</h3>
-                          <h4>{each.url}</h4>
-                        </div>
-                        <div className="metadataImg">
-                          <img src={each.metadataImg} />
-                        </div>
+                <FullPost key={index}>
+                  <div className="post">
+                    <div className="avatar">
+                      <div className="avatarImg">
+                        <img src={each.photo} />
                       </div>
-                    </a>
+                      <div className="icon">
+                        <Like postId={each.id} />
+                      </div>
+                      <div className="comment">
+                        <AiOutlineComment onClick={() => showComments(index)} />
+                        <h3>{each.numberOfComments} comments</h3>
+                      </div>
+                    </div>
+                    <div className="postDescription">
+                      <Link to={`/user/${each.userId}`}>
+                        <h1>{each.name}</h1>
+                      </Link>
+
+                      {showInput && index === inputIndex ? (
+                        <input
+                          autoFocus
+                          value={
+                            newDescription ? newDescription : each.description
+                          }
+                          onKeyDown={(event) => handleKey(event, each.id)}
+                          onChange={(e) => setNewDescription(e.target.value)}
+                          disabled={inputDisable}
+                        />
+                      ) : (
+                        <ReactTagify
+                          colors={"#ffffff"}
+                          tagClicked={(tag) => navigateTag(tag)}
+                        >
+                          <h2>{each.description}</h2>
+                        </ReactTagify>
+                      )}
+                      <a href={each.url}>
+                        <div className="metadata">
+                          <div className="metadataInfo">
+                            <h2>{each.metadataTitle}</h2>
+                            <h3>{each.metadataDescription}</h3>
+                            <h4>{each.url}</h4>
+                          </div>
+                          <div className="metadataImg">
+                            <img src={each.metadataImg} />
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {each.userId === Number(defaultUserId) ? (
+                      <>
+                        <StyledEdit onClick={() => editDescription(index)} />
+                        <StyledDelete />
+                      </>
+                    ) : null}
                   </div>
-                  {each.userId === Number(defaultUserId) ? (
-                    <>
-                      <StyledEdit onClick={() => editDescription(index)} />
-                      <StyledDelete />
-                    </>
+                  {clickComment && index === commentIndex ? (
+                    <Comments
+                      image={defaultImage}
+                      userId={defaultUserId}
+                      token={defaultToken}
+                      postId={each.id}
+                      ownerId={each.userId}
+                    />
                   ) : null}
-                </div>
+                </FullPost>
               ))}
             </Container>
-            {/* trendi */}
             <Trending />
           </SuperContainer>
         ) : (
@@ -240,7 +255,10 @@ const ScreenName = styled.div`
     justify-content: center;
   }
 `;
-
+const FullPost = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const Container = styled.div`
   width: 100vw;
   height: 100%;
@@ -249,11 +267,12 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   .post {
+    width: 611px;
+    height: 276px;
     background-color: #171717;
-    width: 100vw;
-    height: 30vh;
+    border-radius: 16px;
     display: flex;
-    margin: 20px 0 20px 0;
+    margin-top: 40px;
     font-family: "Oswald";
     font-weight: 700;
     position: relative;
@@ -276,9 +295,17 @@ const Container = styled.div`
     height: 32px;
     width: 100%;
     margin: 15px 0 0 0;
+  }
+  .comment {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 15px;
+    color: #ffffff;
+    font-size: 24px;
+    h3 {
+      font-size: 11px;
+    }
   }
   .postDescription {
     width: 75%;
@@ -295,18 +322,23 @@ const Container = styled.div`
       margin: 7px 0 0 0;
     }
     .metadata {
+      height: 155px;
       display: flex;
       align-items: center;
       margin: 10px 0 0 0;
       width: 100%;
-      height: 100px;
       background-color: #171717;
       border: 1px solid #4d4d4d;
       border-radius: 11px;
       .metadataInfo {
+        height: 130px;
         width: 80%;
-        height: 80px;
         margin: 0 0 0 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         h2 {
           font-family: "Lato";
           font-size: 16px;
@@ -316,29 +348,31 @@ const Container = styled.div`
           font-family: "Lato";
           font-size: 11px;
           color: #9b9595;
-          margin: 4px 0 0 0;
+          margin: 4px 0;
+          overflow: hidden;
         }
         h4 {
           font-family: "Lato";
           font-size: 11px;
           color: #cecece;
-          margin: 4px 0 0 0;
+          margin: 4px 0;
+          overflow: hidden;
         }
       }
       .metadataImg {
         img {
-          width: 100px;
-          height: 100px;
+          width: 154px;
+          height: 155px;
           border-radius: 0px 12px 13px 0px;
         }
       }
     }
   }
-  @media (min-width: 600px) {
+  @media (max-width: 600px) {
     .post {
-      width: 611px;
-      height: 276px;
-      border-radius: 16px;
+      width: 100vw;
+      height: 270px;
+      border-radius: 0px;
     }
     .avatarImg {
       margin: 25px 0 0 0;
@@ -346,6 +380,18 @@ const Container = styled.div`
     .postDescription {
       h1 {
         margin: 23px 0 0 0;
+      }
+      .metadata {
+        height: 115px;
+        .metadataInfo {
+          height: 110px;
+        }
+        .metadataImg {
+          img {
+            width: 95px;
+            height: 115px;
+          }
+        }
       }
     }
   }

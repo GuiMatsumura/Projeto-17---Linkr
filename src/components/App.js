@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import UserContext from "../contexts/UserContext.js";
 import HashtagContext from "../contexts/HashtagContext.js";
+import CommentContext from "../contexts/CommentContext.js";
 import Signin from "./signin";
 import Timeline from "./Timeline.js";
 import Signup from "./signup";
@@ -16,38 +17,40 @@ export default function App() {
   const [hashtagClicked, setHashtagClicked] = useState("");
   const [controlTrending, setControlTrending] = useState(false);
   const [controlHashtag, setControlHashtag] = useState(false);
-
+  const [clickComment, setClickComment] = useState(false);
   return (
-    <HashtagContext.Provider
+    <UserContext.Provider
       value={{
-        controlTrending,
-        setControlTrending,
-        controlHashtag,
-        setControlHashtag,
+        token,
+        setToken,
+        image,
+        setImage,
+        userId,
+        setUserId,
+        username,
+        setUsername
       }}
     >
-      <UserContext.Provider
+      <HashtagContext.Provider
         value={{
-          token,
-          setToken,
-          image,
-          setImage,
-          userId,
-          setUserId,
-          username,
-          setUsername
+          controlTrending,
+          setControlTrending,
+          controlHashtag,
+          setControlHashtag,
         }}
       >
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Signin />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/user/:id" element={<UserProfile />} />
-            <Route path="/timeline" element={<Timeline />} />
-            <Route path="/hashtag/:hashtag" element={<Hashtag />} />
-          </Routes>
-        </BrowserRouter>
-      </UserContext.Provider>
-    </HashtagContext.Provider>
+        <CommentContext.Provider value={{ clickComment, setClickComment }}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Signin />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/user/:id" element={<UserProfile />} />
+              <Route path="/timeline" element={<Timeline />} />
+              <Route path="/hashtag/:hashtag" element={<Hashtag />} />
+            </Routes>
+          </BrowserRouter>
+        </CommentContext.Provider>
+      </HashtagContext.Provider>
+    </UserContext.Provider>
   );
 }
