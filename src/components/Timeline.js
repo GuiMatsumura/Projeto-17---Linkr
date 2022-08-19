@@ -6,6 +6,8 @@ import UserContext from "../contexts/UserContext.js";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { FiEdit2, FiTrash } from "react-icons/fi";
 import { AiOutlineComment } from "react-icons/ai";
+import { BiRepost } from "react-icons/bi";
+
 import { ReactTagify } from "react-tagify";
 import HashtagContext from "../contexts/HashtagContext.js";
 import Search from "./Search.js";
@@ -168,6 +170,10 @@ export default function Timeline() {
                         <AiOutlineComment onClick={() => showComments(index)} />
                         <h3>{each.numberOfComments} comments</h3>
                       </div>
+                      <div className="repost">
+                        <BiRepost />
+                        <h3>{each.repostCount} re-posts</h3>
+                      </div>
                     </div>
                     <div className="postDescription">
                       <Link to={`/user/${each.userId}`}>
@@ -304,6 +310,17 @@ const Container = styled.div`
     margin: 15px 0 0 0;
   }
   .comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    color: #ffffff;
+    font-size: 24px;
+    h3 {
+      font-size: 11px;
+    }
+  }
+  .repost{
     display: flex;
     flex-direction: column;
     align-items: center;
