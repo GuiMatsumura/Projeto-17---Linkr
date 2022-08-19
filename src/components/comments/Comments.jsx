@@ -3,7 +3,7 @@ import UserContext from "../../contexts/UserContext";
 import CommentContext from "../../contexts/CommentContext";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-export default function Comments({ image, userId, postId, token }) {
+export default function Comments({ image, userId, postId, token, ownerId }) {
   const { clickComment, setClickComment } = useContext(CommentContext);
   const [newComment, setNewComment] = useState("");
   const [allComments, setAllComments] = useState([]);
@@ -42,7 +42,7 @@ export default function Comments({ image, userId, postId, token }) {
             <div>
               <h1>{each.username}</h1>
               <h3>
-                {each.userId === Number(userId) ? "• post's author" : null}
+                {each.userId === Number(ownerId) ? "• post's author" : null}
               </h3>
             </div>
             <h2>{each.comment}</h2>

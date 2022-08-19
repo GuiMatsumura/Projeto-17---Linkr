@@ -216,6 +216,7 @@ export default function Timeline() {
                       userId={defaultUserId}
                       token={defaultToken}
                       postId={each.id}
+                      ownerId={each.userId}
                     />
                   ) : null}
                 </FullPost>
